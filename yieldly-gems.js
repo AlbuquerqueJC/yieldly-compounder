@@ -204,6 +204,20 @@ const stakeYLDY = async (id=233725850, amount=100) => {
         return stakedYLDY;
     }
 
+    // Check if GEMS-GEMS balance under 1, do not stake.
+    if (id === 233725850 && stakedYLDY < 10) {
+        log(`Stake Yieldly amount too low: ${stakedYLDY} YLDY less than 10`);
+        await browser.close();
+        return stakedYLDY;
+    }
+
+    // Check if GEMS-GEMS balance under 1, do not stake.
+    if (id === 419301793 && stakedYLDY < 1) {
+        log(`Stake Gems amount too low: ${stakedYLDY} GEMS less than 1`);
+        await browser.close();
+        return stakedYLDY;
+    }
+
     await yieldlyPage.evaluate(() => {
         [...document.querySelectorAll('button')].find(element => element.textContent === 'Next').click();
     });
@@ -330,19 +344,19 @@ const log = message => {
             // POOL IDs
             // id=233725850 YLDY-YLDY/ALGO
             const stakedAmount = await stakeYLDY(233725850, 50);
-            log(`Staked Amount in Yieldly/Algo: ${stakedAmount} YLDY`);
+            log(`Staked amount in Yieldly/Algo: ${stakedAmount} YLDY`);
 
             // id=393388133 YLDY-GEMS
             const stakedInGemsAmount = await stakeYLDY(393388133);
-            log(`Staked Amount in Gems: ${stakedInGemsAmount} YLDY`);
+            log(`Staked amount in Gems: ${stakedInGemsAmount} YLDY`);
 
             // id=419301793 GEMS-GEMS Tokens
             const stakedGemsInGemsAmount = await stakeYLDY(419301793);
-            log(`Staked Gems Amount in Gems: ${stakedGemsInGemsAmount} GEMS`);
+            log(`Staked Gems amount in Gems: ${stakedGemsInGemsAmount} GEMS`);
 
             // id=373819681 SMILE-SMILE Tokens
             const stakedSmileInSmileAmount = await stakeYLDY(373819681, 75);
-            log(`Staked Smile Amount in Smile: ${stakedSmileInSmileAmount} SMILE`);
+            log(`Staked Smile amount in Smile: ${stakedSmileInSmileAmount} SMILE`);
 
             // *****************************************
             // AWAIT SLEEP UNTIL REMOVE YLDY FROM POOL
@@ -361,11 +375,11 @@ const log = message => {
             // POOL IDs
             // id=233725850 YLDY-YLDY/ALGO
             const unStakedAmount = await unStakeYLDY(233725850);
-            log(`Un-Staked Amount in Yieldly/Algo: ${unStakedAmount} YLDY`);
+            log(`Un-Staked amount in Yieldly/Algo: ${unStakedAmount} YLDY`);
 
             // id=393388133 YLDY-GEMS
             const unStakedInGemsAmount = await stakeYLDY(393388133);
-            log(`Un-Staked Amount in Gems: ${unStakedInGemsAmount} YLDY`);
+            log(`Un-Staked amount in Gems: ${unStakedInGemsAmount} YLDY`);
 
             // *****************************************
             // AWAIT SLEEP UNTIL BALANCE IS AVAILABLE
@@ -375,14 +389,14 @@ const log = message => {
             // 20 minutes in MS = 1,200,000 1200000
             // 25 minutes in MS = 1,500,000 1500000
             // 30 minutes in MS = 1,800,000 1800000
-            await sleep(900000);
+            await sleep(600000);
 
             // *****************************************
             // STAKE - EVERY YLDY FROM WALLET INTO OPUL
             // *****************************************
             // id=348079765 YLDY-OPUL
             const stakedInOpulAmount = await stakeYLDY(348079765);
-            log(`Staked Amount in Opul: ${stakedInOpulAmount} YLDY`);
+            log(`Staked amount in Opul: ${stakedInOpulAmount} YLDY`);
 
             // Close out
             await sleep(60000);

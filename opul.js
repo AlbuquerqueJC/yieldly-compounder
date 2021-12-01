@@ -166,7 +166,8 @@ const stakeYLDY = async (id=348079765) => {
     await yieldlyPage.waitForTimeout(2000);
 
     const [stakedYLDY] = await yieldlyPage.$$eval('input[type=number]', inputs => inputs.map((input) => parseFloat(input.value)))
-    if (stakedYLDY == 0) {
+    // Don't stake if balance is 0 - 9 YLDY
+    if (stakedYLDY == 0 || stakedYLDY < 10) {
         await browser.close();
         return stakedYLDY;
     }

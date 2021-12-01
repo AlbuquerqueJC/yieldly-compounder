@@ -125,15 +125,15 @@ const claimPoolRewards = async (id=233725850) => {
     }
 
     // Check if YLDY rewards under 199, do not claim.
-    if (id === 233725850 && claimAmounts[0] < 149) {
-        log(`Claim Yieldly Amount too low: ${claimAmounts[0]} YLDY less than 149`);
+    if (id === 233725850 && claimAmounts[0] < 140) {
+        log(`Claim Yieldly Amount too low: ${claimAmounts[0]} YLDY less than 140`);
         await browser.close();
         return claimAmounts;
     }
 
     // Check if SMILE-SMILE rewards under 50, do not claim.
-    if (id === 373819681 && claimAmounts[0] < 49) {
-        log(`Claim Smiles Amount too low: ${claimAmounts[0]} SMILE less than 49`);
+    if (id === 373819681 && claimAmounts[0] < 75) {
+        log(`Claim Smiles Amount too low: ${claimAmounts[0]} SMILE less than 75`);
         await browser.close();
         return claimAmounts;
     }

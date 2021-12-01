@@ -288,8 +288,8 @@ const log = message => {
             // ***************************************
             // AWAIT SLEEP UNTIL REMOVE ALGO FROM NLL
             // ***************************************
-            // 20 minutes in MS = 1200000
-            await sleep(1200000);
+            // 15 minutes in MS = 900000
+            await sleep(900000);
 
             // ********************************
             // UN-STAKE - EVERY ALGO IN WALLET

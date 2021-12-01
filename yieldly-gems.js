@@ -383,8 +383,8 @@ const log = message => {
             log(`Un-Staked amount in Gems: ${unStakedInGemsAmount} YLDY`);
 
             // id=373819681 SMILE-SMILE Tokens
-            const unStakedInGemsAmount = await unStakeYLDY(373819681);
-            log(`Un-Staked Smile amount in Smile: ${unStakedInGemsAmount} SMILE`);
+            const unStakedInSmileAmount = await unStakeYLDY(373819681);
+            log(`Un-Staked Smile amount in Smile: ${unStakedInSmileAmount} SMILE`);
 
             // *****************************************
             // AWAIT SLEEP UNTIL BALANCE IS AVAILABLE

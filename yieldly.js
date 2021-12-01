@@ -126,6 +126,7 @@ const claimPoolRewards = async (id) => {
 
     // Check if YLDY rewards under 199, leave alone.
     if (claimAmounts[1] < 199) {
+        log(`Claim Yieldly Amount too low: ${claimAmounts[1]} YLDY`);
         await browser.close();
         return claimAmounts;
     }

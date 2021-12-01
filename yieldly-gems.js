@@ -126,6 +126,7 @@ const claimPoolRewards = async (id) => {
 
     // Check if YLDY rewards under 199, leave alone.
     if (claimAmounts[1] < 199) {
+        log(`Claim Yieldly Amount too low: ${claimAmounts[1]} YLDY`);
         await browser.close();
         return claimAmounts;
     }
@@ -324,7 +325,7 @@ const log = message => {
             // 25 minutes in MS = 1,500,000 1500000
             // 30 minutes in MS = 1,800,000 1800000
             // 1h in MS = 3,600,000 3600000
-            await sleep(9000);
+            await sleep(3600000);
 
             // ********************************
             // UN-STAKE - EVERY YLDY IN WALLET
@@ -346,7 +347,7 @@ const log = message => {
             // 20 minutes in MS = 1,200,000 1200000
             // 25 minutes in MS = 1,500,000 1500000
             // 30 minutes in MS = 1,800,000 1800000
-            await sleep(9000);
+            await sleep(300000);
 
             // *****************************************
             // STAKE - EVERY YLDY FROM WALLET INTO OPUL

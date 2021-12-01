@@ -147,7 +147,7 @@ const claimPoolRewards = async (id) => {
 
 
 // STAKE AVAILABLE BALANCE
-const stakeYLDY = async (id = 233725850, amount = 100) => {
+const stakeYLDY = async (id, amount = 100) => {
     browser = await puppeteer.launch(PUPPETEER_SETTINGS);
     let pages = await browser.pages();
 
@@ -287,16 +287,17 @@ const log = message => {
             // CLAIM POOL REWARDS
             // *******************
             // POOL IDs
-            // id=233725850 YLDY-YLDY/ALGO
-            const claimedPoolRewards = await claimPoolRewards(233725850);
-            log(`Claimed YLDY Pool Assets: ${claimedPoolRewards[0]} ALGO | ${claimedPoolRewards[1]} YLDY`)
             // id=393388133 YLDY-GEMS
             const claimedGemsPoolRewards = await claimPoolRewards(393388133);
             log(`Claimed GEMS Pool Assets: ${claimedGemsPoolRewards[0]} GEMS`)
-            // Not Yieldly Tokens
+
             // id=419301793 GEMS-GEMS
             const claimedGemsGemsPoolRewards = await claimPoolRewards(419301793);
             log(`Claimed GEMS-GEMS Pool Assets: ${claimedGemsGemsPoolRewards[0]} GEMS`)
+
+            // id=233725850 YLDY-YLDY/ALGO
+            const claimedPoolRewards = await claimPoolRewards(233725850);
+            log(`Claimed YLDY Pool Assets: ${claimedPoolRewards[0]} ALGO | ${claimedPoolRewards[1]} YLDY`)
 
             // *******************************
             // STAKE - EVERY YLDY FROM WALLET
@@ -305,11 +306,13 @@ const log = message => {
             // id=233725850 YLDY-YLDY/ALGO
             const stakedAmount = await stakeYLDY(233725850, 50);
             log(`Staked Amount in Yieldly/Algo: ${stakedAmount} YLDY`);
+
             // id=393388133 YLDY-GEMS
-            const stakedInGemsAmount = await stakeYLDY(393388133, 100);
+            const stakedInGemsAmount = await stakeYLDY(393388133);
             log(`Staked Amount in Gems: ${stakedInGemsAmount} YLDY`);
-            // Not Yieldly Tokens
-            const stakedGemsInGemsAmount = await stakeYLDY(233725850);
+
+            // GEMS Tokens
+            const stakedGemsInGemsAmount = await stakeYLDY(419301793);
             log(`Staked Gems Amount in Gems: ${stakedGemsInGemsAmount} GEMS`);
 
             // *****************************************
@@ -321,7 +324,7 @@ const log = message => {
             // 25 minutes in MS = 1,500,000 1500000
             // 30 minutes in MS = 1,800,000 1800000
             // 1h in MS = 3,600,000 3600000
-            await sleep(90000);
+            await sleep(9000);
 
             // ********************************
             // UN-STAKE - EVERY YLDY IN WALLET
@@ -329,10 +332,11 @@ const log = message => {
             // POOL IDs
             // id=233725850 YLDY-YLDY/ALGO
             const unStakedAmount = await unStakeYLDY(233725850);
-            log(`Staked Amount in Yieldly/Algo: ${unStakedAmount} YLDY`);
+            log(`Un-Staked Amount in Yieldly/Algo: ${unStakedAmount} YLDY`);
+
             // id=393388133 YLDY-GEMS
             const unStakedInGemsAmount = await stakeYLDY(393388133);
-            log(`Staked Amount in Gems: ${unStakedInGemsAmount} YLDY`);
+            log(`Un-Staked Amount in Gems: ${unStakedInGemsAmount} YLDY`);
 
             // *****************************************
             // AWAIT SLEEP UNTIL BALANCE IS AVAILABLE
@@ -342,13 +346,13 @@ const log = message => {
             // 20 minutes in MS = 1,200,000 1200000
             // 25 minutes in MS = 1,500,000 1500000
             // 30 minutes in MS = 1,800,000 1800000
-            await sleep(90000);
+            await sleep(9000);
 
             // *****************************************
             // STAKE - EVERY YLDY FROM WALLET INTO OPUL
             // *****************************************
             // id=348079765 YLDY-OPUL
-            const stakedInOpulAmount = await stakeYLDY(348079765, '100%');
+            const stakedInOpulAmount = await stakeYLDY(348079765);
             log(`Staked Amount in Opul: ${stakedInOpulAmount} YLDY`);
 
             break;

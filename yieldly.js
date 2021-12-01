@@ -316,7 +316,7 @@ const log = message => {
             // POOL IDs
             // id=233725850 YLDY-YLDY/ALGO
             const unStakedAmount = await unStakeYLDY(233725850);
-            log(`Staked Amount in Yieldly/Algo: ${unStakedAmount} YLDY`);
+            log(`Un-Staked Amount in Yieldly/Algo: ${unStakedAmount} YLDY`);
             // id=393388133 YLDY-GEMS
             // const stakedInGemsAmount = await stakeYLDY(393388133);
             // log(`Staked Amount in Gems: ${stakedInGemsAmount} YLDY`);

@@ -141,7 +141,7 @@ const claimPoolRewards = async (id=348079765) => {
 
 
 // STAKE AVAILABLE BALANCE
-const stakeYLDY = async (id=348079765) => {
+const stakeYLDY = async (id=348079765, amount=100) => {
     browser = await puppeteer.launch(PUPPETEER_SETTINGS);
     let pages = await browser.pages();
 
@@ -159,9 +159,21 @@ const stakeYLDY = async (id=348079765) => {
 
     await yieldlyPage.waitForTimeout(2000);
 
-    await yieldlyPage.evaluate(() => {
-        [...document.querySelectorAll('button')].find(element => element.textContent === '100%').click();
-    });
+    if (amount === 50) {
+        await yieldlyPage.evaluate(() => {
+            [...document.querySelectorAll('button')].find(element => element.textContent === '50%').click();
+        });
+    }
+    else if (amount === 75) {
+        await yieldlyPage.evaluate(() => {
+            [...document.querySelectorAll('button')].find(element => element.textContent === '75%').click();
+        });
+    }
+    else {
+        await yieldlyPage.evaluate(() => {
+            [...document.querySelectorAll('button')].find(element => element.textContent === '100%').click();
+        });
+    }
 
     await yieldlyPage.waitForTimeout(2000);
 
@@ -311,15 +323,18 @@ const log = message => {
             // 20 minutes in MS = 1,200,000 1200000
             // 25 minutes in MS = 1,500,000 1500000
             // 30 minutes in MS = 1,800,000 1800000
-            // await sleep(300000);
+            await sleep(300000);
 
-            // *******************************
-            // STAKE - EVERY YLDY FROM WALLET
-            // *******************************
+            // *****************************************************
+            // STAKE - EVERY YLDY FROM WALLET - 1/2 YLDY / 1/2 GEMS
+            // *****************************************************
             // POOL IDs
             // id=233725850 YLDY-YLDY/ALGO
-            // const stakedAmount = await stakeYLDY(233725850);
-            // log(`Staked Amount in Yieldly/Algo: ${stakedAmount} YLDY`);
+            const stakedAmount = await stakeYLDY(233725850, 50);
+            log(`Staked amount in Yieldly/Algo: ${stakedAmount} YLDY`);
+            // id=393388133 YLDY-GEMS
+            const stakedInGemsAmount = await stakeYLDY(393388133);
+            log(`Staked amount in Gems: ${stakedInGemsAmount} YLDY`);
 
             // Close out
             await sleep(60000);

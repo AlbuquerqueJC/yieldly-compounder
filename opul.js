@@ -278,9 +278,6 @@ const log = message => {
             // id=348079765 YLDY-OPUL
             const stakedInOpulAmount = await stakeYLDY(348079765);
             log(`Staked Amount in Opul: ${stakedInOpulAmount} YLDY`);
-            // id=393388133 YLDY-GEMS
-            // const stakedInGemsAmount = await stakeYLDY(393388133);
-            // log(`Staked Amount in Gems: ${stakedInGemsAmount} YLDY`);
 
             // *******************
             // CLAIM POOL REWARDS
@@ -288,9 +285,6 @@ const log = message => {
             // id=348079765 YLDY-OPUL
             const claimedOpulPoolRewards = await claimPoolRewards(348079765);
             log(`Claimed Pool Assets: ${claimedOpulPoolRewards[0]} OPUL`)
-            // id=393388133 YLDY-GEMS
-            // const claimedGemsPoolRewards = await claimPoolRewards(393388133);
-            // log(`Claimed Pool Assets: ${claimedGemsPoolRewards[0]} ALGO | ${claimedGemsPoolRewards[1]} GEMS`)
 
             // *****************************************
             // AWAIT SLEEP UNTIL REMOVE YLDY FROM POOL
@@ -308,9 +302,6 @@ const log = message => {
             // id=348079765 YLDY-OPUL
             const unStakedInOpulAmount = await unStakeYLDY(348079765);
             log(`Un-Staked Amount in Opul: ${unStakedInOpulAmount} YLDY`);
-            // id=393388133 YLDY-GEMS
-            // const stakedInGemsAmount = await stakeYLDY(393388133);
-            // log(`Staked Amount in Gems: ${stakedInGemsAmount} YLDY`);
 
             // *****************************************
             // AWAIT SLEEP UNTIL BALANCE IS AVAILABLE

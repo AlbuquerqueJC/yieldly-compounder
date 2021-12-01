@@ -330,7 +330,7 @@ const log = message => {
             // log(`Staked Amount in Yieldly/Algo: ${stakedAmount} YLDY`);
 
             // Close out
-            log(`--------------------------------END----------------------------------------`);
+            log(`---------------------END-------------------------`);
 
             break;
         } catch (e) {

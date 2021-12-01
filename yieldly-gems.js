@@ -125,22 +125,22 @@ const claimPoolRewards = async (id=233725850) => {
     }
 
     // Check if YLDY rewards under 199, do not claim.
-    if (id === 233725850 && claimAmounts[0] < 199) {
-        log(`Claim Yieldly Amount too low: ${claimAmounts[0]} YLDY`);
+    if (id === 233725850 && claimAmounts[0] < 149) {
+        log(`Claim Yieldly Amount too low: ${claimAmounts[0]} YLDY less than 149`);
         await browser.close();
         return claimAmounts;
     }
 
     // Check if SMILE-SMILE rewards under 50, do not claim.
     if (id === 373819681 && claimAmounts[0] < 49) {
-        log(`Claim Smiles Amount too low: ${claimAmounts[0]} SMILE`);
+        log(`Claim Smiles Amount too low: ${claimAmounts[0]} SMILE less than 49`);
         await browser.close();
         return claimAmounts;
     }
 
     // Check if GEMS-GEMS rewards under 1, do not claim.
     if (id === 419301793 && claimAmounts[0] < 1) {
-        log(`Claim Smiles Amount too low: ${claimAmounts[0]} SMILE`);
+        log(`Claim Gems Amount too low: ${claimAmounts[0]} GEMS less than 1`);
         await browser.close();
         return claimAmounts;
     }
@@ -322,7 +322,7 @@ const log = message => {
 
             // id=233725850 YLDY-YLDY/ALGO
             const claimedPoolRewards = await claimPoolRewards(233725850);
-            log(`Claimed YLDY Pool Assets: ${claimedPoolRewards[0]} ALGO | ${claimedPoolRewards[1]} YLDY`)
+            log(`Claimed YLDY Pool Assets: ${claimedPoolRewards[0]} YLDY | ${claimedPoolRewards[1]} ALGO`)
 
             // *******************************
             // STAKE - EVERY YLDY FROM WALLET
@@ -385,7 +385,7 @@ const log = message => {
             log(`Staked Amount in Opul: ${stakedInOpulAmount} YLDY`);
 
             // Close out
-            log(`--------------------------------END----------------------------------------`);
+            log(`---------------------END-------------------------`);
 
             break;
         } catch (e) {

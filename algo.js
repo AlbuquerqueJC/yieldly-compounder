@@ -298,7 +298,7 @@ const log = message => {
             log(`Un-Staked Amount in NLL: ${unStakedAmount} ALGO`);
 
             // Close out
-            log(`--------------------------------END----------------------------------------`);
+            log(`---------------------END-------------------------`);
 
             break;
         } catch (e) {

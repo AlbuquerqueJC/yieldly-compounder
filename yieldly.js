@@ -126,7 +126,7 @@ const claimPoolRewards = async (id=233725850) => {
 
     // Check if YLDY rewards under 199, leave alone.
     if (claimAmounts[0] < 199) {
-        log(`Claim Yieldly Amount too low: ${claimAmounts[0]} YLDY`);
+        log(`Claim Yieldly Amount too low: ${claimAmounts[0]} YLDY less than 199`);
         await browser.close();
         return claimAmounts;
     }
@@ -284,7 +284,7 @@ const log = message => {
             // POOL IDs
             // id=233725850 YLDY-YLDY/ALGO
             const claimedPoolRewards = await claimPoolRewards(233725850);
-            log(`Claimed Pool Assets: ${claimedPoolRewards[0]} ALGO | ${claimedPoolRewards[1]} YLDY`)
+            log(`Claimed Pool Assets: ${claimedPoolRewards[0]} YLDY | ${claimedPoolRewards[1]} ALGO`)
             // id=393388133 YLDY-GEMS
             // const claimedGemsPoolRewards = await claimPoolRewards(393388133);
             // log(`Claimed Pool Assets: ${claimedGemsPoolRewards[0]} ALGO | ${claimedGemsPoolRewards[1]} GEMS`)
@@ -340,7 +340,7 @@ const log = message => {
             log(`Staked Amount in Opul: ${stakedInOpulAmount} YLDY`);
 
             // Close out
-            log(`--------------------------------END----------------------------------------`);
+            log(`---------------------END-------------------------`);
 
             break;
         } catch (e) {

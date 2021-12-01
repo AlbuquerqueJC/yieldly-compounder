@@ -102,7 +102,7 @@ const connectAlgoWallet = async browser => {
 
 
 // CLAIM STAKING POOL REWARDS
-const claimPoolRewards = async (id) => {
+const claimPoolRewards = async (id=233725850) => {
     browser = await puppeteer.launch(PUPPETEER_SETTINGS);
     let pages = await browser.pages();
     const yieldlyPage = pages[0];
@@ -124,9 +124,23 @@ const claimPoolRewards = async (id) => {
         return claimAmounts;
     }
 
-    // Check if YLDY rewards under 199, leave alone.
-    if (claimAmounts[1] < 199) {
-        log(`Claim Yieldly Amount too low: ${claimAmounts[1]} YLDY`);
+    // Check if YLDY rewards under 199, do not claim.
+    if (id === 233725850 && claimAmounts[0] < 199) {
+        log(`Claim Yieldly Amount too low: ${claimAmounts[0]} YLDY`);
+        await browser.close();
+        return claimAmounts;
+    }
+
+    // Check if SMILE-SMILE rewards under 50, do not claim.
+    if (id === 373819681 && claimAmounts[0] < 49) {
+        log(`Claim Smiles Amount too low: ${claimAmounts[0]} SMILE`);
+        await browser.close();
+        return claimAmounts;
+    }
+
+    // Check if GEMS-GEMS rewards under 1, do not claim.
+    if (id === 419301793 && claimAmounts[0] < 1) {
+        log(`Claim Smiles Amount too low: ${claimAmounts[0]} SMILE`);
         await browser.close();
         return claimAmounts;
     }
@@ -148,7 +162,7 @@ const claimPoolRewards = async (id) => {
 
 
 // STAKE AVAILABLE BALANCE
-const stakeYLDY = async (id, amount = 100) => {
+const stakeYLDY = async (id=233725850, amount=100) => {
     browser = await puppeteer.launch(PUPPETEER_SETTINGS);
     let pages = await browser.pages();
 
@@ -170,7 +184,13 @@ const stakeYLDY = async (id, amount = 100) => {
         await yieldlyPage.evaluate(() => {
             [...document.querySelectorAll('button')].find(element => element.textContent === '50%').click();
         });
-    } else {
+    }
+    else if (amount === 75) {
+        await yieldlyPage.evaluate(() => {
+            [...document.querySelectorAll('button')].find(element => element.textContent === '75%').click();
+        });
+    }
+    else {
         await yieldlyPage.evaluate(() => {
             [...document.querySelectorAll('button')].find(element => element.textContent === '100%').click();
         });
@@ -200,7 +220,7 @@ const stakeYLDY = async (id, amount = 100) => {
 
 
 // UN-STAKE AVAILABLE BALANCE
-const unStakeYLDY = async (id= 233725850) => {
+const unStakeYLDY = async (id=233725850) => {
     browser = await puppeteer.launch(PUPPETEER_SETTINGS);
     let pages = await browser.pages();
 
@@ -296,6 +316,10 @@ const log = message => {
             const claimedGemsGemsPoolRewards = await claimPoolRewards(419301793);
             log(`Claimed GEMS-GEMS Pool Assets: ${claimedGemsGemsPoolRewards[0]} GEMS`)
 
+            // id=373819681 SMILE-SMILE Tokens
+            const claimedSmileSmilePoolRewards = await claimPoolRewards(373819681);
+            log(`Claimed GEMS-GEMS Pool Assets: ${claimedSmileSmilePoolRewards[0]} SMILE`)
+
             // id=233725850 YLDY-YLDY/ALGO
             const claimedPoolRewards = await claimPoolRewards(233725850);
             log(`Claimed YLDY Pool Assets: ${claimedPoolRewards[0]} ALGO | ${claimedPoolRewards[1]} YLDY`)
@@ -312,9 +336,13 @@ const log = message => {
             const stakedInGemsAmount = await stakeYLDY(393388133);
             log(`Staked Amount in Gems: ${stakedInGemsAmount} YLDY`);
 
-            // GEMS Tokens
+            // id=419301793 GEMS-GEMS Tokens
             const stakedGemsInGemsAmount = await stakeYLDY(419301793);
             log(`Staked Gems Amount in Gems: ${stakedGemsInGemsAmount} GEMS`);
+
+            // id=373819681 SMILE-SMILE Tokens
+            const stakedSmileInSmileAmount = await stakeYLDY(373819681, 75);
+            log(`Staked Smile Amount in Smile: ${stakedSmileInSmileAmount} SMILE`);
 
             // *****************************************
             // AWAIT SLEEP UNTIL REMOVE YLDY FROM POOL
@@ -347,7 +375,7 @@ const log = message => {
             // 20 minutes in MS = 1,200,000 1200000
             // 25 minutes in MS = 1,500,000 1500000
             // 30 minutes in MS = 1,800,000 1800000
-            await sleep(300000);
+            await sleep(900000);
 
             // *****************************************
             // STAKE - EVERY YLDY FROM WALLET INTO OPUL
@@ -355,6 +383,9 @@ const log = message => {
             // id=348079765 YLDY-OPUL
             const stakedInOpulAmount = await stakeYLDY(348079765);
             log(`Staked Amount in Opul: ${stakedInOpulAmount} YLDY`);
+
+            // Close out
+            log(`--------------------------------END----------------------------------------`);
 
             break;
         } catch (e) {

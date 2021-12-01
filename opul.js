@@ -102,7 +102,7 @@ const connectAlgoWallet = async browser => {
 
 
 // CLAIM STAKING POOL REWARDS
-const claimPoolRewards = async (id) => {
+const claimPoolRewards = async (id=348079765) => {
     browser = await puppeteer.launch(PUPPETEER_SETTINGS);
     let pages = await browser.pages();
     const yieldlyPage = pages[0];
@@ -141,7 +141,7 @@ const claimPoolRewards = async (id) => {
 
 
 // STAKE AVAILABLE BALANCE
-const stakeYLDY = async (id) => {
+const stakeYLDY = async (id=348079765) => {
     browser = await puppeteer.launch(PUPPETEER_SETTINGS);
     let pages = await browser.pages();
 
@@ -187,7 +187,7 @@ const stakeYLDY = async (id) => {
 
 
 // UN-STAKE AVAILABLE BALANCE
-const unStakeYLDY = async (id) => {
+const unStakeYLDY = async (id=348079765) => {
     browser = await puppeteer.launch(PUPPETEER_SETTINGS);
     let pages = await browser.pages();
 
@@ -286,7 +286,7 @@ const log = message => {
             // *******************
             // id=348079765 YLDY-OPUL
             const claimedOpulPoolRewards = await claimPoolRewards(348079765);
-            log(`Claimed Pool Assets: ${claimedOpulPoolRewards[0]} OPUL | ${claimedOpulPoolRewards[1]} OPUL`)
+            log(`Claimed Pool Assets: ${claimedOpulPoolRewards[0]} OPUL`)
             // id=393388133 YLDY-GEMS
             // const claimedGemsPoolRewards = await claimPoolRewards(393388133);
             // log(`Claimed Pool Assets: ${claimedGemsPoolRewards[0]} ALGO | ${claimedGemsPoolRewards[1]} GEMS`)
@@ -328,6 +328,9 @@ const log = message => {
             // id=233725850 YLDY-YLDY/ALGO
             // const stakedAmount = await stakeYLDY(233725850);
             // log(`Staked Amount in Yieldly/Algo: ${stakedAmount} YLDY`);
+
+            // Close out
+            log(`--------------------------------END----------------------------------------`);
 
             break;
         } catch (e) {

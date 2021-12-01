@@ -102,7 +102,7 @@ const connectAlgoWallet = async browser => {
 
 
 // CLAIM STAKING POOL REWARDS
-const claimPoolRewards = async (id) => {
+const claimPoolRewards = async (id=233725850) => {
     browser = await puppeteer.launch(PUPPETEER_SETTINGS);
     let pages = await browser.pages();
     const yieldlyPage = pages[0];
@@ -125,8 +125,8 @@ const claimPoolRewards = async (id) => {
     }
 
     // Check if YLDY rewards under 199, leave alone.
-    if (claimAmounts[1] < 199) {
-        log(`Claim Yieldly Amount too low: ${claimAmounts[1]} YLDY`);
+    if (claimAmounts[0] < 199) {
+        log(`Claim Yieldly Amount too low: ${claimAmounts[0]} YLDY`);
         await browser.close();
         return claimAmounts;
     }
@@ -148,7 +148,7 @@ const claimPoolRewards = async (id) => {
 
 
 // STAKE AVAILABLE BALANCE
-const stakeYLDY = async (id) => {
+const stakeYLDY = async (id=233725850) => {
     browser = await puppeteer.launch(PUPPETEER_SETTINGS);
     let pages = await browser.pages();
 
@@ -194,7 +194,7 @@ const stakeYLDY = async (id) => {
 
 
 // UN-STAKE AVAILABLE BALANCE
-const unStakeYLDY = async (id) => {
+const unStakeYLDY = async (id=233725850) => {
     browser = await puppeteer.launch(PUPPETEER_SETTINGS);
     let pages = await browser.pages();
 
@@ -338,6 +338,9 @@ const log = message => {
             // id=348079765 YLDY-OPUL
             const stakedInOpulAmount = await stakeYLDY(348079765);
             log(`Staked Amount in Opul: ${stakedInOpulAmount} YLDY`);
+
+            // Close out
+            log(`--------------------------------END----------------------------------------`);
 
             break;
         } catch (e) {

@@ -297,6 +297,9 @@ const log = message => {
             const unStakedAmount = await unStakeALGO();
             log(`Un-Staked Amount in NLL: ${unStakedAmount} ALGO`);
 
+            // Close out
+            log(`--------------------------------END----------------------------------------`);
+
             break;
         } catch (e) {
             // await browser.close();

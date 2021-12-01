@@ -368,12 +368,16 @@ const log = message => {
             // 30 minutes in MS = 1,800,000 1800000
             // 45 minutes in MS = 2,700,000 2700000
             // 1h in MS = 3,600,000 3600000
-            await sleep(2700000);
+            await sleep(1800000);
 
             // ********************************
             // UN-STAKE - EVERY YLDY IN WALLET
             // ********************************
             // POOL IDs
+            // id=373819681 SMILE-SMILE Tokens
+            const unStakedInSmileAmount = await unStakeYLDY(373819681);
+            log(`Un-Staked Smile amount in Smile: ${unStakedInSmileAmount} SMILE`);
+
             // id=233725850 YLDY-YLDY/ALGO
             const unStakedAmount = await unStakeYLDY(233725850);
             log(`Un-Staked amount in Yieldly/Algo: ${unStakedAmount} YLDY`);
@@ -382,9 +386,6 @@ const log = message => {
             const unStakedInGemsAmount = await unStakeYLDY(393388133);
             log(`Un-Staked amount in Gems: ${unStakedInGemsAmount} YLDY`);
 
-            // id=373819681 SMILE-SMILE Tokens
-            const unStakedInSmileAmount = await unStakeYLDY(373819681);
-            log(`Un-Staked Smile amount in Smile: ${unStakedInSmileAmount} SMILE`);
 
             // *****************************************
             // AWAIT SLEEP UNTIL BALANCE IS AVAILABLE

@@ -124,6 +124,12 @@ const claimPoolRewards = async (id) => {
         return claimAmounts;
     }
 
+    // Check if YLDY rewards under 199, leave alone.
+    if (claimAmounts[1] < 199) {
+        await browser.close();
+        return claimAmounts;
+    }
+
     await yieldlyPage.waitForTimeout(2000);
 
     const [nextBtn] = await yieldlyPage.$x("//button[text() = 'Next']");
@@ -141,7 +147,7 @@ const claimPoolRewards = async (id) => {
 
 
 // STAKE AVAILABLE BALANCE
-const stakeYLDY = async (id = 233725850, amount = '100%') => {
+const stakeYLDY = async (id = 233725850, amount = 100) => {
     browser = await puppeteer.launch(PUPPETEER_SETTINGS);
     let pages = await browser.pages();
 
@@ -159,9 +165,15 @@ const stakeYLDY = async (id = 233725850, amount = '100%') => {
 
     await yieldlyPage.waitForTimeout(2000);
 
-    await yieldlyPage.evaluate(() => {
-        [...document.querySelectorAll('button')].find(element => element.textContent === amount).click();
-    });
+    if (amount === 50) {
+        await yieldlyPage.evaluate(() => {
+            [...document.querySelectorAll('button')].find(element => element.textContent === '50%').click();
+        });
+    } else {
+        await yieldlyPage.evaluate(() => {
+            [...document.querySelectorAll('button')].find(element => element.textContent === '100%').click();
+        });
+    }
 
     await yieldlyPage.waitForTimeout(2000);
 
@@ -264,7 +276,7 @@ const log = message => {
 
 // RUNS THIS SCRIPT
 (async () => {
-    for (let i = 0; i < 2; i++) { // TRY TO RUN THE SCRIPT 10 TIMES TO BYPASS POSSIBLE NETWORK ERRORS
+    for (let i = 0; i < 5; i++) { // TRY TO RUN THE SCRIPT 10 TIMES TO BYPASS POSSIBLE NETWORK ERRORS
         try {
             log(`YIELDLY - 1/2 GEMS - 1/2 YLDY/ALGO AUTO COMPOUNDER v1.1.4${DEBUG ? " => [DEBUG] No transactions will be made!" : ""}`)
 
@@ -291,10 +303,10 @@ const log = message => {
             // *******************************
             // POOL IDs
             // id=233725850 YLDY-YLDY/ALGO
-            const stakedAmount = await stakeYLDY(233725850, '50%');
+            const stakedAmount = await stakeYLDY(233725850, 50);
             log(`Staked Amount in Yieldly/Algo: ${stakedAmount} YLDY`);
             // id=393388133 YLDY-GEMS
-            const stakedInGemsAmount = await stakeYLDY(393388133, '100%');
+            const stakedInGemsAmount = await stakeYLDY(393388133, 100);
             log(`Staked Amount in Gems: ${stakedInGemsAmount} YLDY`);
             // Not Yieldly Tokens
             const stakedGemsInGemsAmount = await stakeYLDY(233725850);

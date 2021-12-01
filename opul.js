@@ -264,7 +264,7 @@ const log = message => {
 
 // RUNS THIS SCRIPT
 (async () => {
-    for (let i = 0; i < 2; i++) { // TRY TO RUN THE SCRIPT 10 TIMES TO BYPASS POSSIBLE NETWORK ERRORS
+    for (let i = 0; i < 5; i++) { // TRY TO RUN THE SCRIPT 10 TIMES TO BYPASS POSSIBLE NETWORK ERRORS
         try {
             log(`YIELDLY-OPUL AUTO COMPOUNDER v1.1.4${DEBUG ? " => [DEBUG] No transactions will be made!" : ""}`)
 
@@ -299,7 +299,7 @@ const log = message => {
             // 20 minutes in MS = 1,200,000 1200000
             // 25 minutes in MS = 1,500,000 1500000
             // 30 minutes in MS = 1,800,000 1800000
-            await sleep(1500000);
+            await sleep(1800000);
 
             // ********************************
             // UN-STAKE - EVERY YLDY IN WALLET

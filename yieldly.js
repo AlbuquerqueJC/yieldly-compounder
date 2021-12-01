@@ -124,7 +124,11 @@ const claimPoolRewards = async (id) => {
         return claimAmounts;
     }
 
-    //TODO: Add check if less than 300 YLDY, just wait and do not claim
+    // Check if YLDY rewards under 199, leave alone.
+    if (claimAmounts[1] < 199) {
+        await browser.close();
+        return claimAmounts;
+    }
 
     await yieldlyPage.waitForTimeout(2000);
 
@@ -266,7 +270,7 @@ const log = message => {
 
 // RUNS THIS SCRIPT
 (async () => {
-    for (let i = 0; i < 2; i++) { // TRY TO RUN THE SCRIPT 10 TIMES TO BYPASS POSSIBLE NETWORK ERRORS
+    for (let i = 0; i < 5; i++) { // TRY TO RUN THE SCRIPT 10 TIMES TO BYPASS POSSIBLE NETWORK ERRORS
         try {
             log(`YIELDLY AUTO COMPOUNDER v1.1.4${DEBUG ? " => [DEBUG] No transactions will be made!" : ""}`)
 

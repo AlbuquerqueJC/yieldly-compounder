@@ -5,7 +5,7 @@ const axios = require('axios');
 
 ////////////////////////////////////////////
 //                                        //
-//  NO NEED TO EDIT THIS SCRIPT ANYMORE,  //
+//  ALGO - NLL ONLY SCRIPT                //
 //  PLEASE CHECK settings.js              //
 //                                        //
 ////////////////////////////////////////////
@@ -17,7 +17,7 @@ const PUPPETEER_SETTINGS = {
     headless: settings.headless,
     executablePath: '/usr/bin/chromium-browser',
     args: ['--single-process', '--no-zygote', '--no-sandbox', '--disable-setuid-sandbox'],
-    userDataDir: "./user_data"
+    userDataDir: "./user_data_algo"
 };
 // Windows - WSL Attempt
 // const PUPPETEER_SETTINGS = {
@@ -26,6 +26,7 @@ const PUPPETEER_SETTINGS = {
 //     arg: ['--single-process', '--no-zygote', '--no-sandbox', '--disable-setuid-sandbox', '--disable-web-security'],
 //     userDataDir: "user_data",
 // };
+
 const ENTER = String.fromCharCode(13);
 const ESC = String.fromCharCode(27);
 
@@ -140,90 +141,6 @@ const claimNLLRewards = async () => {
     return claimAmountYLDY
 }
 
-// CLAIM STAKING POOL REWARDS
-const claimPoolRewards = async (id) => {
-    browser = await puppeteer.launch(PUPPETEER_SETTINGS);
-    let pages = await browser.pages();
-    const yieldlyPage = pages[0];
-
-    await yieldlyPage.goto('https://app.yieldly.finance/pools?id=' + id);
-
-    await connectAlgoWallet(browser);
-
-    await yieldlyPage.waitForTimeout(1000);
-
-    const [claimBtn] = await yieldlyPage.$x("//button[text() = 'Claim']");
-    await claimBtn.click();
-
-    await yieldlyPage.waitForTimeout(10000);
-    const claimAmounts = await yieldlyPage.$$eval('.MuiFormControl-root input[type=text]', inputs => inputs.map((input) => parseFloat(input.value.replace(',', ''))))
-
-    if (claimAmounts[0] == 0 && claimAmounts[1] == 0) {
-        await browser.close();
-        return claimAmounts;
-    }
-
-    await yieldlyPage.waitForTimeout(2000);
-
-    const [nextBtn] = await yieldlyPage.$x("//button[text() = 'Next']");
-    await nextBtn.click();
-
-    await myAlgoOpened();
-
-    await signAlgoTransactions();
-
-    await yieldlyPage.waitForTimeout(30000);
-
-    await browser.close();
-    return [Math.min(...claimAmounts), Math.max(...claimAmounts)]
-}
-
-
-// STAKE AVAILABLE BALANCE
-const stakeYLDY = async (id) => {
-    browser = await puppeteer.launch(PUPPETEER_SETTINGS);
-    let pages = await browser.pages();
-
-    const yieldlyPage = pages[0];
-
-    await yieldlyPage.goto('https://app.yieldly.finance/pools?id=' + id);
-
-    await connectAlgoWallet(browser);
-
-    await yieldlyPage.waitForTimeout(5000);
-
-    await yieldlyPage.evaluate(() => {
-        [...document.querySelectorAll('button')].find(element => element.textContent === 'Stake').click();
-    });
-
-    await yieldlyPage.waitForTimeout(2000);
-
-    await yieldlyPage.evaluate(() => {
-        [...document.querySelectorAll('button')].find(element => element.textContent === '100%').click();
-    });
-
-    await yieldlyPage.waitForTimeout(2000);
-
-    const [stakedYLDY] = await yieldlyPage.$$eval('input[type=number]', inputs => inputs.map((input) => parseFloat(input.value)))
-    if (stakedYLDY == 0) {
-        await browser.close();
-        return stakedYLDY;
-    }
-
-    await yieldlyPage.evaluate(() => {
-        [...document.querySelectorAll('button')].find(element => element.textContent === 'Next').click();
-    });
-
-    await myAlgoOpened();
-
-    await signAlgoTransactions();
-
-    await yieldlyPage.waitForTimeout(30000);
-
-    await browser.close();
-    return stakedYLDY
-}
-
 // STAKE HALF ALGO BALANCE
 const stakeALGO = async () => {
     browser = await puppeteer.launch(PUPPETEER_SETTINGS);
@@ -243,16 +160,17 @@ const stakeALGO = async () => {
 
     await yieldlyPage.waitForTimeout(2000);
 
+    // ONLY STAKE 50% OF THE TOTAL BALANCE
     await yieldlyPage.evaluate(() => {
         [...document.querySelectorAll('button')].find(element => element.textContent === '50%').click();
     });
 
     await yieldlyPage.waitForTimeout(2000);
 
-    const [stakedYLDY] = await yieldlyPage.$$eval('input[type=number]', inputs => inputs.map((input) => parseFloat(input.value)))
-    if (stakedYLDY == 0) {
+    const [stakedALGO] = await yieldlyPage.$$eval('input[type=number]', inputs => inputs.map((input) => parseFloat(input.value)))
+    if (stakedALGO == 0) {
         await browser.close();
-        return stakedYLDY;
+        return stakedALGO;
     }
 
     await yieldlyPage.evaluate(() => {
@@ -266,72 +184,18 @@ const stakeALGO = async () => {
     await yieldlyPage.waitForTimeout(30000);
 
     await browser.close();
-    return stakedYLDY
+    return stakedALGO
 }
 
 
-// NFT GAME SUBSCRIPTION
-// let newNFTsSubscribed = 0;
-// const subscribeToNFTs = async () => {
-//     browser = await puppeteer.launch(PUPPETEER_SETTINGS);
-//     let pages = await browser.pages();
-//
-//     const yieldlyPage = pages[0];
-//
-//     await yieldlyPage.goto('https://app.yieldly.finance/nft');
-//
-//     await connectAlgoWallet(browser);
-//
-//     // Wait for "Get Tickets" buttons to disappear if user is already subscribed to the respective NFT
-//     await yieldlyPage.waitForTimeout(30000);
-//
-//
-//     const availableNFTS = await yieldlyPage.$$("div.MuiLinearProgress-root");
-//     for (let nft of availableNFTS) {
-//         await nft.click();
-//         await yieldlyPage.waitForTimeout(1000);
-//     }
-//
-//     // We need to limit the number of subscriptions per script execution because the button "Get Tickets"
-//     // takes a while to disappear after page load, so we end subscribing to the same NFT multiple times
-//     // (yeah, that might happen not sure if winning chances increase though) and burn all our ALGOS in fees.
-//     // The script should wait 30 seconds after page load to make sure things are in order, this is just another
-//     // safety mechanism :)
-//     const MAX_SUBSCRIPTIONS_PER_RUN = 5;
-//
-//     const [ticketBTN] = await yieldlyPage.$x("//button[contains(., 'Get Tickets')]");
-//     if (!ticketBTN || newNFTsSubscribed >= MAX_SUBSCRIPTIONS_PER_RUN) {
-//         await browser.close();
-//         return;
-//     }
-//
-//     log(`Subscribing to NFT #${newNFTsSubscribed+1}...`)
-//
-//     ticketBTN.click();
-//     await yieldlyPage.waitForTimeout(1000);
-//     const [nextBtn] = await yieldlyPage.$x("//button[text() = 'Next']");
-//     await nextBtn.click();
-//
-//     await myAlgoOpened();
-//
-//     await signAlgoTransactions();
-//
-//     await yieldlyPage.waitForTimeout(30000);
-//     newNFTsSubscribed++;
-//
-//     await browser.close();
-//
-//     await subscribeToNFTs();
-// }
-
 // UN-STAKE AVAILABLE BALANCE
-const unstakeYLDY = async (id) => {
+const unStakeALGO = async () => {
     browser = await puppeteer.launch(PUPPETEER_SETTINGS);
     let pages = await browser.pages();
 
     const yieldlyPage = pages[0];
 
-    await yieldlyPage.goto('https://app.yieldly.finance/pools?id=' + id);
+    await yieldlyPage.goto('https://app.yieldly.finance/algo-prize-game');
 
     await connectAlgoWallet(browser);
 
@@ -349,10 +213,10 @@ const unstakeYLDY = async (id) => {
 
     await yieldlyPage.waitForTimeout(2000);
 
-    const [stakedYLDY] = await yieldlyPage.$$eval('input[type=number]', inputs => inputs.map((input) => parseFloat(input.value)))
-    if (stakedYLDY == 0) {
+    const [stakedALGO] = await yieldlyPage.$$eval('input[type=number]', inputs => inputs.map((input) => parseFloat(input.value)))
+    if (stakedALGO == 0) {
         await browser.close();
-        return stakedYLDY;
+        return stakedALGO;
     }
 
     await yieldlyPage.evaluate(() => {
@@ -366,7 +230,7 @@ const unstakeYLDY = async (id) => {
     await yieldlyPage.waitForTimeout(30000);
 
     await browser.close();
-    return stakedYLDY
+    return stakedALGO
 }
 
 // SIGNS TRANSACTIONS
@@ -404,76 +268,34 @@ const log = message => {
 (async () => {
     for (let i = 0; i < 2; i++) { // TRY TO RUN THE SCRIPT 10 TIMES TO BYPASS POSSIBLE NETWORK ERRORS
         try {
-            log(`YIELDLY AUTO COMPOUNDER v1.1.4${DEBUG ? " => [DEBUG] No transactions will be made!" : ""}`)
+            log(`YIELDLY-ALGO NLL AUTO COMPOUNDER v1.1.4${DEBUG ? " => [DEBUG] No transactions will be made!" : ""}`)
 
             // CHECK IF MYALGO WALLET IS CREATED
             await checkAlgoWallet();
 
+            // ******************
             // CLAIM NLL REWARDS
-            // const claimedNLLRewards = await claimNLLRewards();
-            // log(`Claimed NLL Assets: ${claimedNLLRewards} YLDY`)
+            // ******************
+            const claimedNLLRewards = await claimNLLRewards();
+            log(`Claimed NLL Assets: ${claimedNLLRewards} YLDY`)
 
             // *****************************
-            // STAKE - EVERY YLDY IN WALLET
+            // STAKE - HALF ALGO FROM WALLET
             // *****************************
-            // POOL IDs
-            // id=233725850 YLDY-YLDY/ALGO
-            // const stakedAmount = await stakeYLDY(233725850);
-            // log(`Staked Amount in Yieldly/Algo: ${stakedAmount} YLDY`);
-            // id=348079765 YLDY-OPUL
-            const stakedInOpulAmount = await stakeYLDY(348079765);
-            log(`Staked Amount in Opul: ${stakedInOpulAmount} YLDY`);
-            // id=393388133 YLDY-GEMS
-            // const stakedInGemsAmount = await stakeYLDY(393388133);
-            // log(`Staked Amount in Gems: ${stakedInGemsAmount} YLDY`);
+            const stakedAmount = await stakeALGO();
+            log(`Staked Amount in NLL: ${stakedAmount} ALGO`);
 
-            // Not Yieldly Tokens
-            // const stakedGemsInGemsAmount = await stakeYLDY(233725850);
-            // log(`Staked Gems Amount in Gems: ${stakedGemsInGemsAmount} GEMS`);
-
-            // *******************
-            // CLAIM POOL REWARDS
-            // *******************
-            // POOL IDs
-            // id=233725850 YLDY-YLDY/ALGO
-            // const claimedPoolRewards = await claimPoolRewards(233725850);
-            // log(`Claimed Pool Assets: ${claimedPoolRewards[0]} ALGO | ${claimedPoolRewards[1]} YLDY`)
-            // id=348079765 YLDY-OPUL
-            const claimedOpulPoolRewards = await claimPoolRewards(348079765);
-            log(`Claimed Pool Assets: ${claimedOpulPoolRewards[0]} ALGO | ${claimedOpulPoolRewards[1]} OPUL`)
-            // id=393388133 YLDY-GEMS
-            // const claimedGemsPoolRewards = await claimPoolRewards(393388133);
-            // log(`Claimed Pool Assets: ${claimedGemsPoolRewards[0]} ALGO | ${claimedGemsPoolRewards[1]} GEMS`)
-
-            // Not Yieldly Tokens
-            // id=419301793 GEMS-GEMS
-            // const claimedGemsGemsPoolRewards = await claimPoolRewards(419301793);
-            // log(`Claimed Pool Assets: ${claimedGemsGemsPoolRewards[0]} ALGO | ${claimedGemsGemsPoolRewards[1]} GEMS`)
-
-            // *****************************************
-            // AWAIT SLEEP UNTIL REMOVE YLDY FROM POOL
-            // *****************************************
-            // 15 minutes in MS = 900000
-            await sleep(900);
+            // ***************************************
+            // AWAIT SLEEP UNTIL REMOVE ALGO FROM NLL
+            // ***************************************
+            // 20 minutes in MS = 1200000
+            await sleep(1200000);
 
             // ********************************
-            // UN-STAKE - EVERY YLDY IN WALLET
+            // UN-STAKE - EVERY ALGO IN WALLET
             // ********************************
-            // POOL IDs
-            // id=233725850 YLDY-YLDY/ALGO
-            // const stakedAmount = await stakeYLDY(233725850);
-            // log(`Staked Amount in Yieldly/Algo: ${stakedAmount} YLDY`);
-            // id=348079765 YLDY-OPUL
-            const unstakedInOpulAmount = await unstakeYLDY(348079765);
-            log(`Staked Amount in Opul: ${unstakedInOpulAmount} YLDY`);
-            // id=393388133 YLDY-GEMS
-            // const stakedInGemsAmount = await stakeYLDY(393388133);
-            // log(`Staked Amount in Gems: ${stakedInGemsAmount} YLDY`);
-
-
-            // ENTER NFT GAME - NOT 100% TESTED SO COMMENTED OUT. USE AT YOUR WON RISK
-            // await subscribeToNFTs();
-            // log(`Number of NFTs Subscribed: ${newNFTsSubscribed}`);
+            const unStakedAmount = await unStakeALGO();
+            log(`Un-Staked Amount in NLL: ${unStakedAmount} ALGO`);
 
             break;
         } catch (e) {

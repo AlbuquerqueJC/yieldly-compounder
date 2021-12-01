@@ -107,7 +107,7 @@ const claimPoolRewards = async (id=348079765) => {
     let pages = await browser.pages();
     const yieldlyPage = pages[0];
 
-    await yieldlyPage.goto('https://app.yieldly.finance/pools?id=' + id);
+    await yieldlyPage.goto(`https://app.yieldly.finance/pools?id=${id}`);
 
     await connectAlgoWallet(browser);
 
@@ -147,7 +147,7 @@ const stakeYLDY = async (id=348079765) => {
 
     const yieldlyPage = pages[0];
 
-    await yieldlyPage.goto('https://app.yieldly.finance/pools?id=' + id);
+    await yieldlyPage.goto(`https://app.yieldly.finance/pools?id=${id}`);
 
     await connectAlgoWallet(browser);
 
@@ -193,7 +193,7 @@ const unStakeYLDY = async (id=348079765) => {
 
     const yieldlyPage = pages[0];
 
-    await yieldlyPage.goto('https://app.yieldly.finance/pools?id=' + id);
+    await yieldlyPage.goto(`https://app.yieldly.finance/pools?id=${id}`);
 
     await connectAlgoWallet(browser);
 
@@ -330,7 +330,8 @@ const log = message => {
             // log(`Staked Amount in Yieldly/Algo: ${stakedAmount} YLDY`);
 
             // Close out
-            log(`---------------------END-------------------------`);
+            await sleep(60000);
+            log(`------ END -----`);
 
             break;
         } catch (e) {

@@ -298,7 +298,8 @@ const log = message => {
             log(`Un-Staked Amount in NLL: ${unStakedAmount} ALGO`);
 
             // Close out
-            log(`---------------------END-------------------------`);
+            await sleep(60000);
+            log(`------ END -----`);
 
             break;
         } catch (e) {

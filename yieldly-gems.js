@@ -107,7 +107,7 @@ const claimPoolRewards = async (id=233725850) => {
     let pages = await browser.pages();
     const yieldlyPage = pages[0];
 
-    await yieldlyPage.goto('https://app.yieldly.finance/pools?id=' + id);
+    await yieldlyPage.goto(`https://app.yieldly.finance/pools?id=${id}`);
 
     await connectAlgoWallet(browser);
 
@@ -168,7 +168,7 @@ const stakeYLDY = async (id=233725850, amount=100) => {
 
     const yieldlyPage = pages[0];
 
-    await yieldlyPage.goto('https://app.yieldly.finance/pools?id=' + id);
+    await yieldlyPage.goto(`https://app.yieldly.finance/pools?id=${id}`);
 
     await connectAlgoWallet(browser);
 
@@ -226,7 +226,7 @@ const unStakeYLDY = async (id=233725850) => {
 
     const yieldlyPage = pages[0];
 
-    await yieldlyPage.goto('https://app.yieldly.finance/pools?id=' + id);
+    await yieldlyPage.goto(`https://app.yieldly.finance/pools?id=${id}`);
 
     await connectAlgoWallet(browser);
 
@@ -318,7 +318,7 @@ const log = message => {
 
             // id=373819681 SMILE-SMILE Tokens
             const claimedSmileSmilePoolRewards = await claimPoolRewards(373819681);
-            log(`Claimed GEMS-GEMS Pool Assets: ${claimedSmileSmilePoolRewards[0]} SMILE`)
+            log(`Claimed SMILE-SMILE Pool Assets: ${claimedSmileSmilePoolRewards[0]} SMILE`)
 
             // id=233725850 YLDY-YLDY/ALGO
             const claimedPoolRewards = await claimPoolRewards(233725850);
@@ -385,7 +385,8 @@ const log = message => {
             log(`Staked Amount in Opul: ${stakedInOpulAmount} YLDY`);
 
             // Close out
-            log(`---------------------END-------------------------`);
+            await sleep(60000);
+            log(`------ END -----`);
 
             break;
         } catch (e) {

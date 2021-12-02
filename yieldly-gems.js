@@ -124,16 +124,16 @@ const claimPoolRewards = async (id=233725850) => {
         return claimAmounts;
     }
 
-    // Check if YLDY rewards under 199, do not claim.
-    if (id === 233725850 && claimAmounts[0] < 140) {
-        log(`Claim Yieldly Amount too low: ${claimAmounts[0]} YLDY less than 140`);
+    // Check if YLDY rewards under 475 (about 6 days worth with 81k YLDY), do not claim.
+    if (id === 233725850 && claimAmounts[0] < 474) {
+        log(`Claim Yieldly Amount too low: ${claimAmounts[0]} YLDY less than 475`);
         await browser.close();
         return claimAmounts;
     }
 
     // Check if SMILE-SMILE rewards under 50, do not claim.
-    if (id === 373819681 && claimAmounts[0] < 75) {
-        log(`Claim Smiles Amount too low: ${claimAmounts[0]} SMILE less than 75`);
+    if (id === 373819681 && claimAmounts[0] < 49) {
+        log(`Claim Smiles Amount too low: ${claimAmounts[0]} SMILE less than 50`);
         await browser.close();
         return claimAmounts;
     }
@@ -204,7 +204,7 @@ const stakeYLDY = async (id=233725850, amount=100) => {
         return stakedYLDY;
     }
 
-    // Check if GEMS-GEMS balance under 1, do not stake.
+    // Check if YLDY balance under 1, do not stake.
     if (id === 233725850 && stakedYLDY < 10) {
         log(`Stake Yieldly amount too low: ${stakedYLDY} YLDY less than 10`);
         await browser.close();

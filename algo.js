@@ -268,6 +268,7 @@ const log = message => {
 (async () => {
     for (let i = 0; i < 5; i++) { // TRY TO RUN THE SCRIPT 10 TIMES TO BYPASS POSSIBLE NETWORK ERRORS
         try {
+            log(`------ START -----`);
             log(`YIELDLY-ALGO NLL AUTO COMPOUNDER v1.1.4${DEBUG ? " => [DEBUG] No transactions will be made!" : ""}`)
 
             // CHECK IF MYALGO WALLET IS CREATED

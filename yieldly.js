@@ -274,6 +274,7 @@ const log = message => {
 (async () => {
     for (let i = 0; i < 5; i++) { // TRY TO RUN THE SCRIPT 10 TIMES TO BYPASS POSSIBLE NETWORK ERRORS
         try {
+            log(`------ START -----`);
             log(`YIELDLY AUTO COMPOUNDER v1.1.4${DEBUG ? " => [DEBUG] No transactions will be made!" : ""}`)
 
             // CHECK IF MYALGO WALLET IS CREATED
@@ -305,9 +306,7 @@ const log = message => {
             // AWAIT SLEEP UNTIL REMOVE YLDY FROM POOL
             // *****************************************
             // 5 minutes in MS = 300,000 300000
-            // 15 minutes in MS = 900,000 900000
             // 20 minutes in MS = 1,200,000 1200000
-            // 25 minutes in MS = 1,500,000 1500000
             // 30 minutes in MS = 1,800,000 1800000
             // 1h in MS = 3,600,000 3600000
             await sleep(3600000);

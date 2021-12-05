@@ -119,7 +119,7 @@ const claimPoolRewards = async (id=233725850) => {
     await yieldlyPage.waitForTimeout(10000);
     const claimAmounts = await yieldlyPage.$$eval('.MuiFormControl-root input[type=text]', inputs => inputs.map((input) => parseFloat(input.value.replace(',', ''))))
 
-    if (claimAmounts[0] == 0 && claimAmounts[1] == 0) {
+    if (claimAmounts[0] == 0) {
         await browser.close();
         return claimAmounts;
     }
@@ -127,6 +127,13 @@ const claimPoolRewards = async (id=233725850) => {
     // Check if YLDY rewards under 375 (about 4 days worth with 81k YLDY), do not claim.
     if (id === 233725850 && claimAmounts[0] < 374) {
         log(`Claim Yieldly Amount too low: ${claimAmounts[0]} YLDY less than 375`);
+        await browser.close();
+        return claimAmounts;
+    }
+
+    // Check if XET rewards under 4, do not claim.
+    if (id === 424101057 && claimAmounts[0] < 4) {
+        log(`Claim XET Amount too low: ${claimAmounts[0]} XET less than 4`);
         await browser.close();
         return claimAmounts;
     }
@@ -313,6 +320,7 @@ const log = message => {
 (async () => {
     for (let i = 0; i < 5; i++) { // TRY TO RUN THE SCRIPT 10 TIMES TO BYPASS POSSIBLE NETWORK ERRORS
         try {
+            log(`------ START -----`);
             log(`YIELDLY - 1/2 XET - 1/2 YLDY/ALGO AUTO COMPOUNDER v1.1.4${DEBUG ? " => [DEBUG] No transactions will be made!" : ""}`)
 
             // CHECK IF MYALGO WALLET IS CREATED
@@ -322,17 +330,17 @@ const log = message => {
             // CLAIM POOL REWARDS
             // *******************
             // POOL IDs
-            // id=393388133 YLDY-XET
-            const claimedXETPoolRewards = await claimPoolRewards(424101057);
-            log(`Claimed XET Pool Assets: ${claimedXETPoolRewards[0]} XET`)
+            // id=373819681 SMILE-SMILE Tokens
+            const claimedSmileSmilePoolRewards = await claimPoolRewards(373819681);
+            log(`Claimed SMILE-SMILE Pool Assets: ${claimedSmileSmilePoolRewards[0]} SMILE`)
 
             // id=419301793 GEMS-GEMS
             const claimedGemsGemsPoolRewards = await claimPoolRewards(419301793);
             log(`Claimed GEMS-GEMS Pool Assets: ${claimedGemsGemsPoolRewards[0]} GEMS`)
 
-            // id=373819681 SMILE-SMILE Tokens
-            const claimedSmileSmilePoolRewards = await claimPoolRewards(373819681);
-            log(`Claimed SMILE-SMILE Pool Assets: ${claimedSmileSmilePoolRewards[0]} SMILE`)
+            // id=424101057 YLDY-XET
+            const claimedXETPoolRewards = await claimPoolRewards(424101057);
+            log(`Claimed XET Pool Assets: ${claimedXETPoolRewards[0]} XET`)
 
             // id=233725850 YLDY-YLDY/ALGO
             const claimedPoolRewards = await claimPoolRewards(233725850);
@@ -346,7 +354,7 @@ const log = message => {
             const stakedAmount = await stakeYLDY(233725850, 50);
             log(`Staked amount in Yieldly/Algo: ${stakedAmount} YLDY`);
 
-            // id=393388133 YLDY-XET
+            // id=424101057 YLDY-XET
             const stakedInXETAmount = await stakeYLDY(424101057);
             log(`Staked amount in XET: ${stakedInXETAmount} YLDY`);
 
@@ -362,7 +370,6 @@ const log = message => {
             // AWAIT SLEEP UNTIL REMOVE YLDY FROM POOL
             // *****************************************
             // 20 minutes in MS = 1,200,000 1200000
-            // 25 minutes in MS = 1,500,000 1500000
             // 30 minutes in MS = 1,800,000 1800000
             // 45 minutes in MS = 2,700,000 2700000
             // 1h in MS = 3,600,000 3600000
@@ -376,13 +383,13 @@ const log = message => {
             const unStakedInSmileAmount = await unStakeYLDY(373819681);
             log(`Un-Staked Smile amount in Smile: ${unStakedInSmileAmount} SMILE`);
 
-            // id=233725850 YLDY-YLDY/ALGO
-            const unStakedAmount = await unStakeYLDY(233725850);
-            log(`Un-Staked amount in Yieldly/Algo: ${unStakedAmount} YLDY`);
-
             // id=393388133 YLDY-XET
             const unStakedInXETAmount = await unStakeYLDY(424101057);
             log(`Un-Staked amount in XET: ${unStakedInXETAmount} YLDY`);
+
+            // id=233725850 YLDY-YLDY/ALGO
+            const unStakedAmount = await unStakeYLDY(233725850);
+            log(`Un-Staked amount in Yieldly/Algo: ${unStakedAmount} YLDY`);
 
 
             // *****************************************
@@ -390,7 +397,7 @@ const log = message => {
             // *****************************************
             // 5 minutes in MS = 300,000 300000
             // 15 minutes in MS = 900,000 900000
-            await sleep(600000);
+            await sleep(300000);
 
             // *****************************************
             // STAKE - EVERY YLDY FROM WALLET INTO OPUL

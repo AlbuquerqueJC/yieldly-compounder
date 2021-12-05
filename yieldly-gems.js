@@ -119,7 +119,7 @@ const claimPoolRewards = async (id=233725850) => {
     await yieldlyPage.waitForTimeout(10000);
     const claimAmounts = await yieldlyPage.$$eval('.MuiFormControl-root input[type=text]', inputs => inputs.map((input) => parseFloat(input.value.replace(',', ''))))
 
-    if (claimAmounts[0] == 0 && claimAmounts[1] == 0) {
+    if (claimAmounts[0] == 0) {
         await browser.close();
         return claimAmounts;
     }
@@ -390,7 +390,7 @@ const log = message => {
             // *****************************************
             // 5 minutes in MS = 300,000 300000
             // 15 minutes in MS = 900,000 900000
-            await sleep(600000);
+            await sleep(300000);
 
             // *****************************************
             // STAKE - EVERY YLDY FROM WALLET INTO OPUL

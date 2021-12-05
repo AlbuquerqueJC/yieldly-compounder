@@ -326,15 +326,16 @@ const log = message => {
             await sleep(300000);
 
             // *****************************************************
-            // STAKE - EVERY YLDY FROM WALLET - 1/2 YLDY / 1/2 GEMS
+            // STAKE - EVERY YLDY FROM WALLET - 1/2 YLDY / 1/2 XET
             // *****************************************************
             // POOL IDs
             // id=233725850 YLDY-YLDY/ALGO
             const stakedAmount = await stakeYLDY(233725850, 50);
             log(`Staked amount in Yieldly/Algo: ${stakedAmount} YLDY`);
             // id=393388133 YLDY-GEMS
-            const stakedInGemsAmount = await stakeYLDY(393388133);
-            log(`Staked amount in Gems: ${stakedInGemsAmount} YLDY`);
+            // id=424101057 YLDY-XET
+            const stakedInSecondPoolAmount = await stakeYLDY(424101057);
+            log(`Staked amount in XET: ${stakedInSecondPoolAmount} YLDY`);
 
             // Close out
             await sleep(60000);

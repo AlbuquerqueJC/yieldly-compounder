@@ -361,8 +361,6 @@ const log = message => {
             // *****************************************
             // AWAIT SLEEP UNTIL REMOVE YLDY FROM POOL
             // *****************************************
-            // 5 minutes in MS = 300,000 300000
-            // 15 minutes in MS = 900,000 900000
             // 20 minutes in MS = 1,200,000 1200000
             // 25 minutes in MS = 1,500,000 1500000
             // 30 minutes in MS = 1,800,000 1800000
@@ -392,9 +390,6 @@ const log = message => {
             // *****************************************
             // 5 minutes in MS = 300,000 300000
             // 15 minutes in MS = 900,000 900000
-            // 20 minutes in MS = 1,200,000 1200000
-            // 25 minutes in MS = 1,500,000 1500000
-            // 30 minutes in MS = 1,800,000 1800000
             await sleep(600000);
 
             // *****************************************

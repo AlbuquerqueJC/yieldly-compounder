@@ -287,9 +287,6 @@ const log = message => {
             // id=233725850 YLDY-YLDY/ALGO
             const claimedPoolRewards = await claimPoolRewards(233725850);
             log(`Claimed Pool Assets: ${claimedPoolRewards[0]} YLDY | ${claimedPoolRewards[1]} ALGO`)
-            // id=393388133 YLDY-GEMS
-            // const claimedGemsPoolRewards = await claimPoolRewards(393388133);
-            // log(`Claimed Pool Assets: ${claimedGemsPoolRewards[0]} ALGO | ${claimedGemsPoolRewards[1]} GEMS`)
 
             // *******************************
             // STAKE - EVERY YLDY FROM WALLET
@@ -298,9 +295,6 @@ const log = message => {
             // id=233725850 YLDY-YLDY/ALGO
             const stakedAmount = await stakeYLDY(233725850);
             log(`Staked Amount in Yieldly/Algo: ${stakedAmount} YLDY`);
-            // id=393388133 YLDY-GEMS
-            // const stakedInGemsAmount = await stakeYLDY(393388133);
-            // log(`Staked Amount in Gems: ${stakedInGemsAmount} YLDY`);
 
             // *****************************************
             // AWAIT SLEEP UNTIL REMOVE YLDY FROM POOL
@@ -318,9 +312,6 @@ const log = message => {
             // id=233725850 YLDY-YLDY/ALGO
             const unStakedAmount = await unStakeYLDY(233725850);
             log(`Un-Staked Amount in Yieldly/Algo: ${unStakedAmount} YLDY`);
-            // id=393388133 YLDY-GEMS
-            // const stakedInGemsAmount = await stakeYLDY(393388133);
-            // log(`Staked Amount in Gems: ${stakedInGemsAmount} YLDY`);
 
             // *****************************************
             // AWAIT SLEEP UNTIL BALANCE IS AVAILABLE

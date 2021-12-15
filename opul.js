@@ -19,13 +19,6 @@ const PUPPETEER_SETTINGS = {
     args: ['--single-process', '--no-zygote', '--no-sandbox', '--disable-setuid-sandbox'],
     userDataDir: "./user_data"
 };
-// Windows - WSL Attempt
-// const PUPPETEER_SETTINGS = {
-//     headless: settings.headless,
-//     executablePath: '/mnt/c/Program Files/Chromium/chrome.exe',
-//     arg: ['--single-process', '--no-zygote', '--no-sandbox', '--disable-setuid-sandbox', '--disable-web-security'],
-//     userDataDir: "user_data",
-// };
 const ENTER = String.fromCharCode(13);
 const ESC = String.fromCharCode(27);
 
@@ -47,26 +40,6 @@ function terminalPrompt(query) {
 }
 
 
-// CHECK IF MYALGO ACCOUNT IS CREATED
-const checkAlgoWallet = async () => {
-    browser = await puppeteer.launch(PUPPETEER_SETTINGS);
-    const page = (await browser.pages())[0];
-    await page.goto('https://wallet.myalgo.com/');
-    await page.waitForSelector('input.input-password, div.home-image-1');
-
-    // CHECKS IF THERE'S AN <input> IN PAGE, INDICATING A WALLET HAS BEEN STORED LOCALLY
-    const walletCreated = await page.evaluate(() => !!document.querySelector('input.input-password')) // !! converts anything to boolean
-    if (!walletCreated) {
-
-        // WAIT FOR USER INPUT ON THE TERMINAL AFTER THE LOGIN IS DONE
-        await terminalPrompt("No wallet data, please create a wallet and press ENTER");
-        await browser.close();
-        process.exit();
-    }
-    await browser.close();
-}
-
-
 // CONNECTS MY ALGO WALLET
 const connectAlgoWallet = async browser => {
     let pages = await browser.pages();
@@ -81,7 +54,8 @@ const connectAlgoWallet = async browser => {
     const [connectBtn] = await yieldlyPage.$x("//button[contains(., 'Connect Wallet')]");
     await connectBtn.click();
 
-    await yieldlyPage.waitForTimeout(1000);
+    await yieldlyPage.waitForTimeout(5000);
+
     const [walletBtn] = await yieldlyPage.$x("//button[contains(., 'My ALGO Wallet')]");
     await walletBtn.click();
 
@@ -102,16 +76,13 @@ const connectAlgoWallet = async browser => {
 
 
 // CLAIM STAKING POOL REWARDS
-const claimPoolRewards = async (id=348079765) => {
-    browser = await puppeteer.launch(PUPPETEER_SETTINGS);
+const claimPoolRewards = async (browser, id=348079765) => {
     let pages = await browser.pages();
     const yieldlyPage = pages[0];
 
     await yieldlyPage.goto(`https://app.yieldly.finance/pools?id=${id}`);
-
-    await connectAlgoWallet(browser);
-
-    await yieldlyPage.waitForTimeout(1000);
+    log(`--- Loading ---`);
+    await yieldlyPage.waitForTimeout(5000);
 
     const [claimBtn] = await yieldlyPage.$x("//button[text() = 'Claim']");
     await claimBtn.click();
@@ -120,7 +91,7 @@ const claimPoolRewards = async (id=348079765) => {
     const claimAmounts = await yieldlyPage.$$eval('.MuiFormControl-root input[type=text]', inputs => inputs.map((input) => parseFloat(input.value.replace(',', ''))))
 
     if (claimAmounts[0] == 0 && claimAmounts[1] == 0) {
-        await browser.close();
+        log(`--- Nothing to claim ---`);
         return claimAmounts;
     }
 
@@ -135,22 +106,17 @@ const claimPoolRewards = async (id=348079765) => {
 
     await yieldlyPage.waitForTimeout(30000);
 
-    await browser.close();
     return [Math.min(...claimAmounts), Math.max(...claimAmounts)]
 }
 
 
 // STAKE AVAILABLE BALANCE
-const stakeYLDY = async (id=348079765, amount=100) => {
-    browser = await puppeteer.launch(PUPPETEER_SETTINGS);
+const stakeYLDY = async (browser, id=348079765, amount=100) => {
     let pages = await browser.pages();
-
     const yieldlyPage = pages[0];
 
     await yieldlyPage.goto(`https://app.yieldly.finance/pools?id=${id}`);
-
-    await connectAlgoWallet(browser);
-
+    log(`--- Loading ---`);
     await yieldlyPage.waitForTimeout(5000);
 
     await yieldlyPage.evaluate(() => {
@@ -180,7 +146,7 @@ const stakeYLDY = async (id=348079765, amount=100) => {
     const [stakedYLDY] = await yieldlyPage.$$eval('input[type=number]', inputs => inputs.map((input) => parseFloat(input.value)))
     // Don't stake if balance is 0 - 9 YLDY
     if (stakedYLDY == 0 || stakedYLDY < 10) {
-        await browser.close();
+        log(`--- Stake amount too low ---`);
         return stakedYLDY;
     }
 
@@ -194,22 +160,17 @@ const stakeYLDY = async (id=348079765, amount=100) => {
 
     await yieldlyPage.waitForTimeout(30000);
 
-    await browser.close();
     return stakedYLDY
 }
 
 
 // UN-STAKE AVAILABLE BALANCE
-const unStakeYLDY = async (id=348079765) => {
-    browser = await puppeteer.launch(PUPPETEER_SETTINGS);
+const unStakeYLDY = async (browser, id=348079765) => {
     let pages = await browser.pages();
-
     const yieldlyPage = pages[0];
 
     await yieldlyPage.goto(`https://app.yieldly.finance/pools?id=${id}`);
-
-    await connectAlgoWallet(browser);
-
+    log(`--- Loading ---`);
     await yieldlyPage.waitForTimeout(5000);
 
     await yieldlyPage.evaluate(() => {
@@ -226,7 +187,7 @@ const unStakeYLDY = async (id=348079765) => {
 
     const [stakedYLDY] = await yieldlyPage.$$eval('input[type=number]', inputs => inputs.map((input) => parseFloat(input.value)))
     if (stakedYLDY == 0) {
-        await browser.close();
+        log(`--- Nothing to unstake ---`);
         return stakedYLDY;
     }
 
@@ -240,7 +201,6 @@ const unStakeYLDY = async (id=348079765) => {
 
     await yieldlyPage.waitForTimeout(30000);
 
-    await browser.close();
     return stakedYLDY
 }
 
@@ -274,46 +234,55 @@ const log = message => {
     axios.get(`https://api.telegram.org/bot${settings.telegram_api}/sendmessage?chat_id=${settings.telegram_chatid}&disable_web_page_preview=1&disable_notification=true&text=${encodeURIComponent(message)}`);
 }
 
-
 // RUNS THIS SCRIPT
 (async () => {
-    for (let i = 0; i < 2; i++) { // TRY TO RUN THE SCRIPT 10 TIMES TO BYPASS POSSIBLE NETWORK ERRORS
+    for (let i = 0; i < 10; i++) { // TRY TO RUN THE SCRIPT 10 TIMES TO BYPASS POSSIBLE NETWORK ERRORS
         try {
             log(`------ START -----`);
-            log(`YIELDLY-OPUL AUTO COMPOUNDER v1.1.4${DEBUG ? " => [DEBUG] No transactions will be made!" : ""}`)
+            log(`YIELDLY-ALGO NLL AUTO COMPOUNDER v1.1.4${DEBUG ? " => [DEBUG] No transactions will be made!" : ""}`)
 
-            // CHECK IF MYALGO WALLET IS CREATED
-            await checkAlgoWallet();
+            browser = await puppeteer.launch(PUPPETEER_SETTINGS);
+            let pages = await browser.pages();
+            const yieldlyPage = pages[0];
+
+            await yieldlyPage.goto('https://app.yieldly.finance/algo-prize-game');
+            log(`--- Loading ---`);
+            await yieldlyPage.waitForTimeout(15000);
+
+            await connectAlgoWallet(browser);
+            log(`--- Connecting Wallet ---`);
+            await yieldlyPage.waitForTimeout(5000);
 
             // *******************************
             // STAKE - EVERY YLDY FROM WALLET
             // *******************************
             // id=348079765 YLDY-OPUL
-            const stakedInOpulAmount = await stakeYLDY(348079765);
+            log(`--- Staking ---`);
+            const stakedInOpulAmount = await stakeYLDY(browser, 348079765);
             log(`Staked Amount in Opul: ${stakedInOpulAmount} YLDY`);
 
             // *******************
             // CLAIM POOL REWARDS
             // *******************
             // id=348079765 YLDY-OPUL
-            const claimedOpulPoolRewards = await claimPoolRewards(348079765);
+            log(`--- Claiming ---`);
+            const claimedOpulPoolRewards = await claimPoolRewards(browser, 348079765);
             log(`Claimed Pool Assets: ${claimedOpulPoolRewards[0]} OPUL`)
 
             // *****************************************
             // AWAIT SLEEP UNTIL REMOVE YLDY FROM POOL
             // *****************************************
-            // 5 minutes in MS = 300,000 300000
-            // 15 minutes in MS = 900,000 900000
             // 20 minutes in MS = 1,200,000 1200000
-            // 25 minutes in MS = 1,500,000 1500000
             // 30 minutes in MS = 1,800,000 1800000
+            log(`--- Sleeping 30mins ---`);
             await sleep(1800000);
 
             // ********************************
             // UN-STAKE - EVERY YLDY IN WALLET
             // ********************************
             // id=348079765 YLDY-OPUL
-            const unStakedInOpulAmount = await unStakeYLDY(348079765);
+            log(`--- UnStaking ---`);
+            const unStakedInOpulAmount = await unStakeYLDY(browser, 348079765);
             log(`Un-Staked Amount in Opul: ${unStakedInOpulAmount} YLDY`);
 
             // *****************************************
@@ -321,9 +290,7 @@ const log = message => {
             // *****************************************
             // 5 minutes in MS = 300,000 300000
             // 15 minutes in MS = 900,000 900000
-            // 20 minutes in MS = 1,200,000 1200000
-            // 25 minutes in MS = 1,500,000 1500000
-            // 30 minutes in MS = 1,800,000 1800000
+            log(`--- Sleeping 5mins ---`);
             await sleep(300000);
 
             // *****************************************************
@@ -331,20 +298,22 @@ const log = message => {
             // *****************************************************
             // POOL IDs
             // id=233725850 YLDY-YLDY/ALGO
-            const stakedAmount = await stakeYLDY(233725850, 50);
+            log(`--- Staking ---`);
+            const stakedAmount = await stakeYLDY(browser, 233725850, 50);
             log(`Staked amount in Yieldly/Algo: ${stakedAmount} YLDY`);
             // id=393388133 YLDY-GEMS
             // id=424101057 YLDY-XET
-            const stakedInSecondPoolAmount = await stakeYLDY(424101057);
+            log(`--- Staking ---`);
+            const stakedInSecondPoolAmount = await stakeYLDY(browser, 424101057);
             log(`Staked amount in XET: ${stakedInSecondPoolAmount} YLDY`);
 
             // Close out
             await sleep(60000);
+            await browser.close();
             log(`------ END -----`);
-
             break;
         } catch (e) {
-            // await browser.close();
+            await browser.close();
             log(`ERROR: ${e}\n`)
         }
     }

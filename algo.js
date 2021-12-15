@@ -107,14 +107,6 @@ const claimNLLRewards = async () => {
     let pages = await browser.pages();
     const yieldlyPage = pages[0];
 
-    await yieldlyPage.goto('https://app.yieldly.finance/algo-prize-game');
-
-    await yieldlyPage.waitForTimeout(10000);
-
-    await connectAlgoWallet(browser);
-
-    await yieldlyPage.waitForTimeout(5000);
-
     const [claimBtn] = await yieldlyPage.$x("//button[text() = 'Claim']");
     await claimBtn.click();
 
@@ -144,16 +136,7 @@ const claimNLLRewards = async () => {
 // STAKE HALF ALGO BALANCE
 const stakeALGO = async () => {
     let pages = await browser.pages();
-
     const yieldlyPage = pages[0];
-
-    await yieldlyPage.goto('https://app.yieldly.finance/algo-prize-game');
-
-    await yieldlyPage.waitForTimeout(10000);
-
-    await connectAlgoWallet(browser);
-
-    await yieldlyPage.waitForTimeout(5000);
 
     await yieldlyPage.evaluate(() => {
         [...document.querySelectorAll('button')].find(element => element.textContent === 'Stake').click();
@@ -197,9 +180,9 @@ const unStakeALGO = async () => {
     const yieldlyPage = pages[0];
 
     await yieldlyPage.goto('https://app.yieldly.finance/algo-prize-game');
+    await yieldlyPage.waitForTimeout(15000);
 
     await connectAlgoWallet(browser);
-
     await yieldlyPage.waitForTimeout(5000);
 
     await yieldlyPage.evaluate(() => {
@@ -275,6 +258,14 @@ const log = message => {
             // CHECK IF MYALGO WALLET IS CREATED
             //await checkAlgoWallet();
             browser = await puppeteer.launch(PUPPETEER_SETTINGS);
+            let pages = await browser.pages();
+            const yieldlyPage = pages[0];
+
+            await yieldlyPage.goto('https://app.yieldly.finance/algo-prize-game');
+            await yieldlyPage.waitForTimeout(10000);
+
+            await connectAlgoWallet(browser);
+            await yieldlyPage.waitForTimeout(5000);
 
             // ******************
             // CLAIM NLL REWARDS
@@ -282,9 +273,13 @@ const log = message => {
             const claimedNLLRewards = await claimNLLRewards();
             log(`Claimed NLL Assets: ${claimedNLLRewards} YLDY`)
 
+
             // *****************************
             // STAKE - HALF ALGO FROM WALLET
             // *****************************
+            await yieldlyPage.goto('https://app.yieldly.finance/algo-prize-game');
+            await yieldlyPage.waitForTimeout(10000);
+
             const stakedAmount = await stakeALGO();
             log(`Staked Amount in NLL: ${stakedAmount} ALGO`);
 
@@ -295,7 +290,8 @@ const log = message => {
             // 12.5 minutes in MS = 750000
             // 15 minutes in MS = 900000
             await browser.close();
-            await sleep(1800000);
+            log(`------ Sleeping -----`);
+            //await sleep(1800000);
 
             // ********************************
             // UN-STAKE - EVERY ALGO IN WALLET

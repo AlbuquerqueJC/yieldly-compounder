@@ -225,7 +225,7 @@ const unStakeYLDY = async (browser, id=233725850) => {
 
     await yieldlyPage.goto(`https://app.yieldly.finance/pools?id=${id}`);
     log(`--- Loading ---`);
-    await yieldlyPage.waitForTimeout(15000);
+    await yieldlyPage.waitForTimeout(20000);
 
     await yieldlyPage.evaluate(() => {
         [...document.querySelectorAll('button')].find(element => element.textContent === 'Withdraw').click();
@@ -302,7 +302,7 @@ const log = message => {
 
             await yieldlyPage.goto('https://app.yieldly.finance/pools');
             log(`--- Initializing ---`);
-            await yieldlyPage.waitForTimeout(15000);
+            await yieldlyPage.waitForTimeout(20000);
 
             await connectAlgoWallet(browser);
             log(`--- Connecting Wallet ---`);

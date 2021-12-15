@@ -116,7 +116,7 @@ const log = message => {
 
             await yieldlyPage.goto('https://app.yieldly.finance/algo-prize-game');
             log(`--- Initializing ---`);
-            await yieldlyPage.waitForTimeout(10000);
+            await yieldlyPage.waitForTimeout(30000);
             await connectAlgoWallet(browser);
             log(`--- Connecting Wallet ---`);
             await yieldlyPage.waitForTimeout(5000);

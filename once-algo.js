@@ -188,55 +188,6 @@ const log = message => {
                 log(`Staked Amount in NLL: ${stakedALGO} ALGO`);
             }
 
-            // ***************************************
-            // AWAIT SLEEP UNTIL REMOVE ALGO FROM NLL
-            // ***************************************
-            // 15 minutes in MS = 900000
-            // 20 minutes in MS = 1200000
-            // 30 minutes in MS = 1800000
-            log(`--- Sleeping 20mins ---`);
-            await sleep(1200000);
-
-            // ********************************
-            // UN-STAKE - EVERY ALGO IN WALLET
-            // ********************************
-            await yieldlyPage.goto('https://app.yieldly.finance/algo-prize-game');
-            log(`--- Loading ---`);
-            await yieldlyPage.waitForTimeout(30000);
-            log(`--- Unstaking ---`);
-
-            await yieldlyPage.evaluate(() => {
-                [...document.querySelectorAll('button')].find(element => element.textContent === 'Withdraw').click();
-            });
-            await yieldlyPage.waitForTimeout(2000);
-
-            await yieldlyPage.evaluate(() => {
-                [...document.querySelectorAll('button')].find(element => element.textContent === '100%').click();
-            });
-            await yieldlyPage.waitForTimeout(2000);
-
-            const [unstakedAlgo] = await yieldlyPage.$$eval('input[type=number]', inputs => inputs.map((input) => parseFloat(input.value)))
-            if (unstakedAlgo == 0) {
-                await yieldlyPage.type('input.MuiInputBase-input', ESC);
-                log(`Nothing unstaked: ${unstakedAlgo} ALGO`);
-                log(`------ END -----`);
-                await browser.close();
-                break;
-            } else {
-                await yieldlyPage.waitForTimeout(2000);
-                await yieldlyPage.evaluate(() => {
-                    [...document.querySelectorAll('button')].find(element => element.textContent === 'Next').click();
-                });
-
-                await myAlgoOpened();
-
-                await signAlgoTransactions();
-
-                await yieldlyPage.waitForTimeout(30000);
-
-                log(`Un-Staked Amount in NLL: ${unstakedAlgo} ALGO`);
-            }
-
             // Close out
             await sleep(60000);
             await browser.close();

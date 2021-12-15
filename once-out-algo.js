@@ -121,88 +121,9 @@ const log = message => {
             log(`--- Connecting Wallet ---`);
             await yieldlyPage.waitForTimeout(5000);
 
-            // ******************
-            // CLAIM NLL REWARDS
-            // ******************
-            log(`--- Claiming ---`);
-            const [claimBtn] = await yieldlyPage.$x("//button[text() = 'Claim']");
-            await claimBtn.click();
-
-            await yieldlyPage.waitForTimeout(2000);
-
-            const [claimAmountYLDY] = await yieldlyPage.$$eval('input', inputs => inputs.map((input) => parseFloat(input.value)))
-
-            if (claimAmountYLDY == 0) {
-                await yieldlyPage.type('input.MuiInputBase-input', ESC);
-                log(`Claimed nothing! NLL Assets: ${claimAmountYLDY} YLDY`);
-            } else {
-                await yieldlyPage.waitForTimeout(2000);
-                const [nextBtn] = await yieldlyPage.$x("//button[text() = 'Next']");
-                await nextBtn.click();
-
-                await myAlgoOpened();
-
-                await signAlgoTransactions();
-
-                await yieldlyPage.waitForTimeout(30000);
-                log(`Claimed NLL Assets: ${claimAmountYLDY} YLDY`);
-            }
-
-            // *****************************
-            // STAKE - HALF ALGO FROM WALLET
-            // *****************************
-            await yieldlyPage.goto('https://app.yieldly.finance/algo-prize-game');
-            log(`--- Loading ---`);
-            await yieldlyPage.waitForTimeout(30000);
-            log(`--- Staking ---`);
-
-            await yieldlyPage.evaluate(() => {
-                [...document.querySelectorAll('button')].find(element => element.textContent === 'Stake').click();
-            });
-            await yieldlyPage.waitForTimeout(2000);
-
-            // ONLY STAKE 50% OF THE TOTAL BALANCE
-            await yieldlyPage.evaluate(() => {
-                [...document.querySelectorAll('button')].find(element => element.textContent === '50%').click();
-            });
-            await yieldlyPage.waitForTimeout(2000);
-
-            const [stakedALGO] = await yieldlyPage.$$eval('input[type=number]', inputs => inputs.map((input) => parseFloat(input.value)))
-            if (stakedALGO == 0) {
-                await yieldlyPage.type('input.MuiInputBase-input', ESC);
-                log(`Staked nothing: ${stakedALGO} ALGO`);
-                log(`------ END -----`);
-                await browser.close();
-                break;
-            } else {
-                await yieldlyPage.waitForTimeout(2000);
-                await yieldlyPage.evaluate(() => {
-                    [...document.querySelectorAll('button')].find(element => element.textContent === 'Next').click();
-                });
-                await myAlgoOpened();
-
-                await signAlgoTransactions();
-
-                await yieldlyPage.waitForTimeout(30000);
-
-                log(`Staked Amount in NLL: ${stakedALGO} ALGO`);
-            }
-
-            // ***************************************
-            // AWAIT SLEEP UNTIL REMOVE ALGO FROM NLL
-            // ***************************************
-            // 15 minutes in MS = 900000
-            // 20 minutes in MS = 1200000
-            // 30 minutes in MS = 1800000
-            log(`--- Sleeping 20mins ---`);
-            await sleep(1200000);
-
             // ********************************
             // UN-STAKE - EVERY ALGO IN WALLET
             // ********************************
-            await yieldlyPage.goto('https://app.yieldly.finance/algo-prize-game');
-            log(`--- Loading ---`);
-            await yieldlyPage.waitForTimeout(30000);
             log(`--- Unstaking ---`);
 
             await yieldlyPage.evaluate(() => {

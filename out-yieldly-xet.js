@@ -301,7 +301,7 @@ const log = message => {
             const yieldlyPage = pages[0];
 
             await yieldlyPage.goto('https://app.yieldly.finance/pools');
-            log(`--- Loading ---`);
+            log(`--- Initializing ---`);
             await yieldlyPage.waitForTimeout(15000);
 
             await connectAlgoWallet(browser);

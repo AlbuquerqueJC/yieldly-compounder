@@ -19,13 +19,6 @@ const PUPPETEER_SETTINGS = {
     args: ['--single-process', '--no-zygote', '--no-sandbox', '--disable-setuid-sandbox'],
     userDataDir: "./user_data_algo"
 };
-// Windows - WSL Attempt
-// const PUPPETEER_SETTINGS = {
-//     headless: settings.headless,
-//     executablePath: '/mnt/c/Program Files/Chromium/chrome.exe',
-//     arg: ['--single-process', '--no-zygote', '--no-sandbox', '--disable-setuid-sandbox', '--disable-web-security'],
-//     userDataDir: "user_data",
-// };
 
 const ENTER = String.fromCharCode(13);
 const ESC = String.fromCharCode(27);
@@ -67,7 +60,6 @@ const checkAlgoWallet = async () => {
     await browser.close();
 }
 
-
 // CONNECTS MY ALGO WALLET
 const connectAlgoWallet = async browser => {
     let pages = await browser.pages();
@@ -100,7 +92,6 @@ const connectAlgoWallet = async browser => {
         await myAlgoPage.click('.custom-btn')
     } catch (e) { }
 }
-
 
 // CLAIM NLL REWARDS
 const claimNLLRewards = async browser => {
@@ -170,7 +161,6 @@ const stakeALGO = async browser => {
     // await browser.close();
     return stakedALGO
 }
-
 
 // UN-STAKE AVAILABLE BALANCE
 const unStakeALGO = async (browser) => {
@@ -242,7 +232,6 @@ const log = message => {
     axios.get(`https://api.telegram.org/bot${settings.telegram_api}/sendmessage?chat_id=${settings.telegram_chatid}&disable_web_page_preview=1&disable_notification=true&text=${encodeURIComponent(message)}`);
 }
 
-
 // RUNS THIS SCRIPT
 (async () => {
     for (let i = 0; i < 1; i++) { // TRY TO RUN THE SCRIPT 10 TIMES TO BYPASS POSSIBLE NETWORK ERRORS
@@ -301,12 +290,13 @@ const log = message => {
             log(`Un-Staked Amount in NLL: ${unStakedAmount} ALGO`);
 
             // Close out
-            await sleep(60000);
+            await sleep(6000);
+            await browser.close();
             log(`------ END -----`);
 
             break;
         } catch (e) {
-            // await browser.close();
+            await browser.close();
             log(`ERROR: ${e}\n`)
         }
     }

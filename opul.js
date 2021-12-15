@@ -153,22 +153,26 @@ const stakeYLDY = async (id=348079765, amount=100) => {
 
     await yieldlyPage.waitForTimeout(5000);
 
-    const [stakeBtn] = await yieldlyPage.$x("//button[text() = 'Stake']");
-    await stakeBtn.click();
+    await yieldlyPage.evaluate(() => {
+        [...document.querySelectorAll('button')].find(element => element.textContent === 'Stake').click();
+    });
 
     await yieldlyPage.waitForTimeout(2000);
 
     if (amount === 50) {
-        const [fiftyBtn] = await yieldlyPage.$x("//button[text() = '50%']");
-        await fiftyBtn.click();
+        await yieldlyPage.evaluate(() => {
+            [...document.querySelectorAll('button')].find(element => element.textContent === '50%').click();
+        });
     }
     else if (amount === 75) {
-        const [seventyFiveBtn] = await yieldlyPage.$x("//button[text() = '75%']");
-        await seventyFiveBtn.click();
+        await yieldlyPage.evaluate(() => {
+            [...document.querySelectorAll('button')].find(element => element.textContent === '75%').click();
+        });
     }
     else {
-        const [hundredBtn] = await yieldlyPage.$x("//button[text() = '100%']");
-        await hundredBtn.click();
+        await yieldlyPage.evaluate(() => {
+            [...document.querySelectorAll('button')].find(element => element.textContent === '100%').click();
+        });
     }
 
     await yieldlyPage.waitForTimeout(2000);
@@ -180,8 +184,9 @@ const stakeYLDY = async (id=348079765, amount=100) => {
         return stakedYLDY;
     }
 
-    const [nextBtn] = await yieldlyPage.$x("//button[text() = 'Next']");
-    await nextBtn.click();
+    await yieldlyPage.evaluate(() => {
+        [...document.querySelectorAll('button')].find(element => element.textContent === 'Next').click();
+    });
 
     await myAlgoOpened();
 
@@ -207,13 +212,15 @@ const unStakeYLDY = async (id=348079765) => {
 
     await yieldlyPage.waitForTimeout(5000);
 
-    const [withdrawBtn] = await yieldlyPage.$x("//button[text() = 'Withdraw']");
-    await withdrawBtn.click();
+    await yieldlyPage.evaluate(() => {
+        [...document.querySelectorAll('button')].find(element => element.textContent === 'Withdraw').click();
+    });
 
     await yieldlyPage.waitForTimeout(2000);
 
-    const [hundredBtn] = await yieldlyPage.$x("//button[text() = '100%']");
-    await hundredBtn.click();
+    await yieldlyPage.evaluate(() => {
+        [...document.querySelectorAll('button')].find(element => element.textContent === '100%').click();
+    });
 
     await yieldlyPage.waitForTimeout(2000);
 
@@ -223,8 +230,9 @@ const unStakeYLDY = async (id=348079765) => {
         return stakedYLDY;
     }
 
-    const [nextBtn] = await yieldlyPage.$x("//button[text() = 'Next']");
-    await nextBtn.click();
+    await yieldlyPage.evaluate(() => {
+        [...document.querySelectorAll('button')].find(element => element.textContent === 'Next').click();
+    });
 
     await myAlgoOpened();
 
@@ -269,7 +277,7 @@ const log = message => {
 
 // RUNS THIS SCRIPT
 (async () => {
-    for (let i = 0; i < 5; i++) { // TRY TO RUN THE SCRIPT 10 TIMES TO BYPASS POSSIBLE NETWORK ERRORS
+    for (let i = 0; i < 2; i++) { // TRY TO RUN THE SCRIPT 10 TIMES TO BYPASS POSSIBLE NETWORK ERRORS
         try {
             log(`------ START -----`);
             log(`YIELDLY-OPUL AUTO COMPOUNDER v1.1.4${DEBUG ? " => [DEBUG] No transactions will be made!" : ""}`)
@@ -327,8 +335,8 @@ const log = message => {
             log(`Staked amount in Yieldly/Algo: ${stakedAmount} YLDY`);
             // id=393388133 YLDY-GEMS
             // id=424101057 YLDY-XET
-            const stakedInSecondPoolAmount = await stakeYLDY(393388133);
-            log(`Staked amount in GEMS: ${stakedInSecondPoolAmount} YLDY`);
+            const stakedInSecondPoolAmount = await stakeYLDY(424101057);
+            log(`Staked amount in XET: ${stakedInSecondPoolAmount} YLDY`);
 
             // Close out
             await sleep(60000);

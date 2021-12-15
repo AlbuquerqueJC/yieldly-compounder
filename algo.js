@@ -103,7 +103,7 @@ const connectAlgoWallet = async browser => {
 
 
 // CLAIM NLL REWARDS
-const claimNLLRewards = async () => {
+const claimNLLRewards = async browser => {
     let pages = await browser.pages();
     const yieldlyPage = pages[0];
 
@@ -134,7 +134,7 @@ const claimNLLRewards = async () => {
 }
 
 // STAKE HALF ALGO BALANCE
-const stakeALGO = async () => {
+const stakeALGO = async browser => {
     let pages = await browser.pages();
     const yieldlyPage = pages[0];
 
@@ -262,7 +262,7 @@ const log = message => {
             const yieldlyPage = pages[0];
 
             await yieldlyPage.goto('https://app.yieldly.finance/algo-prize-game');
-            await yieldlyPage.waitForTimeout(10000);
+            await yieldlyPage.waitForTimeout(15000);
 
             await connectAlgoWallet(browser);
             await yieldlyPage.waitForTimeout(5000);
@@ -270,9 +270,8 @@ const log = message => {
             // ******************
             // CLAIM NLL REWARDS
             // ******************
-            const claimedNLLRewards = await claimNLLRewards();
+            const claimedNLLRewards = await claimNLLRewards(browser);
             log(`Claimed NLL Assets: ${claimedNLLRewards} YLDY`)
-
 
             // *****************************
             // STAKE - HALF ALGO FROM WALLET
@@ -280,18 +279,18 @@ const log = message => {
             await yieldlyPage.goto('https://app.yieldly.finance/algo-prize-game');
             await yieldlyPage.waitForTimeout(10000);
 
-            const stakedAmount = await stakeALGO();
+            const stakedAmount = await stakeALGO(browser);
             log(`Staked Amount in NLL: ${stakedAmount} ALGO`);
 
             // ***************************************
             // AWAIT SLEEP UNTIL REMOVE ALGO FROM NLL
             // ***************************************
             // 10 minutes in MS = 600000
-            // 12.5 minutes in MS = 750000
             // 15 minutes in MS = 900000
+            // 20 minutes in MS = 1200000
             await browser.close();
             log(`------ Sleeping -----`);
-            //await sleep(1800000);
+            await sleep(1200000);
 
             // ********************************
             // UN-STAKE - EVERY ALGO IN WALLET

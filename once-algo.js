@@ -19,14 +19,6 @@ const PUPPETEER_SETTINGS = {
     args: ['--single-process', '--no-zygote', '--no-sandbox', '--disable-setuid-sandbox'],
     userDataDir: "./user_data_algo"
 };
-// Windows - WSL Attempt
-// const PUPPETEER_SETTINGS = {
-//     headless: settings.headless,
-//     executablePath: '/mnt/c/Program Files/Chromium/chrome.exe',
-//     arg: ['--single-process', '--no-zygote', '--no-sandbox', '--disable-setuid-sandbox', '--disable-web-security'],
-//     userDataDir: "user_data",
-// };
-
 const ENTER = String.fromCharCode(13);
 const ESC = String.fromCharCode(27);
 
@@ -46,27 +38,6 @@ function terminalPrompt(query) {
         })
     );
 }
-
-
-// CHECK IF MYALGO ACCOUNT IS CREATED
-const checkAlgoWallet = async () => {
-    browser = await puppeteer.launch(PUPPETEER_SETTINGS);
-    const page = (await browser.pages())[0];
-    await page.goto('https://wallet.myalgo.com/');
-    await page.waitForSelector('input.input-password, div.home-image-1');
-
-    // CHECKS IF THERE'S AN <input> IN PAGE, INDICATING A WALLET HAS BEEN STORED LOCALLY
-    const walletCreated = await page.evaluate(() => !!document.querySelector('input.input-password')) // !! converts anything to boolean
-    if (!walletCreated) {
-
-        // WAIT FOR USER INPUT ON THE TERMINAL AFTER THE LOGIN IS DONE
-        await terminalPrompt("No wallet data, please create a wallet and press ENTER");
-        await browser.close();
-        process.exit();
-    }
-    await browser.close();
-}
-
 
 // CONNECTS MY ALGO WALLET
 const connectAlgoWallet = async browser => {
@@ -99,140 +70,6 @@ const connectAlgoWallet = async browser => {
         await myAlgoPage.click('.title-preview')
         await myAlgoPage.click('.custom-btn')
     } catch (e) { }
-}
-
-
-// CLAIM NLL REWARDS
-const claimNLLRewards = async () => {
-    browser = await puppeteer.launch(PUPPETEER_SETTINGS);
-    let pages = await browser.pages();
-    const yieldlyPage = pages[0];
-
-    await yieldlyPage.goto('https://app.yieldly.finance/algo-prize-game');
-
-    await connectAlgoWallet(browser);
-
-    await yieldlyPage.waitForTimeout(5000);
-
-    const [claimBtn] = await yieldlyPage.$x("//button[text() = 'Claim']");
-    await claimBtn.click();
-
-    await yieldlyPage.waitForTimeout(2000);
-
-    const [claimAmountYLDY] = await yieldlyPage.$$eval('input', inputs => inputs.map((input) => parseFloat(input.value)))
-    if (claimAmountYLDY == 0) {
-        await browser.close();
-        return claimAmountYLDY;
-    }
-
-    await yieldlyPage.waitForTimeout(2000);
-
-    const [nextBtn] = await yieldlyPage.$x("//button[text() = 'Next']");
-    await nextBtn.click();
-
-    await myAlgoOpened();
-
-
-    await signAlgoTransactions();
-
-    await yieldlyPage.waitForTimeout(30000);
-
-    await browser.close();
-    return claimAmountYLDY
-}
-
-// STAKE HALF ALGO BALANCE
-const stakeALGO = async () => {
-    browser = await puppeteer.launch(PUPPETEER_SETTINGS);
-    let pages = await browser.pages();
-
-    const yieldlyPage = pages[0];
-
-    await yieldlyPage.goto('https://app.yieldly.finance/algo-prize-game');
-
-    await yieldlyPage.waitForTimeout(10000);
-
-    await connectAlgoWallet(browser);
-
-    await yieldlyPage.waitForTimeout(5000);
-
-    await yieldlyPage.evaluate(() => {
-        [...document.querySelectorAll('button')].find(element => element.textContent === 'Stake').click();
-    });
-
-    await yieldlyPage.waitForTimeout(2000);
-
-    // ONLY STAKE 50% OF THE TOTAL BALANCE
-    await yieldlyPage.evaluate(() => {
-        [...document.querySelectorAll('button')].find(element => element.textContent === '50%').click();
-    });
-
-    await yieldlyPage.waitForTimeout(2000);
-
-    const [stakedALGO] = await yieldlyPage.$$eval('input[type=number]', inputs => inputs.map((input) => parseFloat(input.value)))
-    if (stakedALGO == 0) {
-        await browser.close();
-        return stakedALGO;
-    }
-
-    await yieldlyPage.evaluate(() => {
-        [...document.querySelectorAll('button')].find(element => element.textContent === 'Next').click();
-    });
-
-    await myAlgoOpened();
-
-    await signAlgoTransactions();
-
-    await yieldlyPage.waitForTimeout(30000);
-
-    await browser.close();
-    return stakedALGO
-}
-
-
-// UN-STAKE AVAILABLE BALANCE
-const unStakeALGO = async () => {
-    browser = await puppeteer.launch(PUPPETEER_SETTINGS);
-    let pages = await browser.pages();
-
-    const yieldlyPage = pages[0];
-
-    await yieldlyPage.goto('https://app.yieldly.finance/algo-prize-game');
-
-    await connectAlgoWallet(browser);
-
-    await yieldlyPage.waitForTimeout(5000);
-
-    await yieldlyPage.evaluate(() => {
-        [...document.querySelectorAll('button')].find(element => element.textContent === 'Withdraw').click();
-    });
-
-    await yieldlyPage.waitForTimeout(2000);
-
-    await yieldlyPage.evaluate(() => {
-        [...document.querySelectorAll('button')].find(element => element.textContent === '100%').click();
-    });
-
-    await yieldlyPage.waitForTimeout(2000);
-
-    const [stakedALGO] = await yieldlyPage.$$eval('input[type=number]', inputs => inputs.map((input) => parseFloat(input.value)))
-    if (stakedALGO == 0) {
-        await browser.close();
-        return stakedALGO;
-    }
-
-    await yieldlyPage.evaluate(() => {
-        [...document.querySelectorAll('button')].find(element => element.textContent === 'Next').click();
-    });
-
-    await myAlgoOpened();
-
-    await signAlgoTransactions();
-
-    await yieldlyPage.waitForTimeout(30000);
-
-    await browser.close();
-    return stakedALGO
 }
 
 // SIGNS TRANSACTIONS
@@ -268,25 +105,26 @@ const log = message => {
 
 // RUNS THIS SCRIPT
 (async () => {
-    for (let i = 0; i < 1; i++) { // TRY TO RUN THE SCRIPT 10 TIMES TO BYPASS POSSIBLE NETWORK ERRORS
+    for (let i = 0; i < 10; i++) { // TRY TO RUN THE SCRIPT 10 TIMES TO BYPASS POSSIBLE NETWORK ERRORS
         try {
             log(`------ START -----`);
             log(`YIELDLY-ALGO NLL AUTO COMPOUNDER v1.1.4${DEBUG ? " => [DEBUG] No transactions will be made!" : ""}`)
 
-            // CHECK IF MYALGO WALLET IS CREATED
-            await checkAlgoWallet();
-
             browser = await puppeteer.launch(PUPPETEER_SETTINGS);
             let pages = await browser.pages();
             const yieldlyPage = pages[0];
+
             await yieldlyPage.goto('https://app.yieldly.finance/algo-prize-game');
+            log(`--- Loading ---`);
             await yieldlyPage.waitForTimeout(10000);
             await connectAlgoWallet(browser);
+            log(`--- Connecting Wallet ---`);
             await yieldlyPage.waitForTimeout(5000);
 
             // ******************
             // CLAIM NLL REWARDS
             // ******************
+            log(`--- Claiming ---`);
             const [claimBtn] = await yieldlyPage.$x("//button[text() = 'Claim']");
             await claimBtn.click();
 
@@ -313,6 +151,11 @@ const log = message => {
             // *****************************
             // STAKE - HALF ALGO FROM WALLET
             // *****************************
+            await yieldlyPage.goto('https://app.yieldly.finance/algo-prize-game');
+            log(`--- Loading ---`);
+            await yieldlyPage.waitForTimeout(30000);
+            log(`--- Staking ---`);
+
             await yieldlyPage.evaluate(() => {
                 [...document.querySelectorAll('button')].find(element => element.textContent === 'Stake').click();
             });
@@ -329,6 +172,7 @@ const log = message => {
                 await yieldlyPage.type('input.MuiInputBase-input', ESC);
                 log(`Staked nothing: ${stakedALGO} ALGO`);
                 log(`------ END -----`);
+                await browser.close();
                 break;
             } else {
                 await yieldlyPage.waitForTimeout(2000);
@@ -347,15 +191,20 @@ const log = message => {
             // ***************************************
             // AWAIT SLEEP UNTIL REMOVE ALGO FROM NLL
             // ***************************************
-            // 10 minutes in MS = 600000
-            // 12.5 minutes in MS = 750000
             // 15 minutes in MS = 900000
-            log(`------ Sleeping -----`);
-            await sleep(900000);
+            // 20 minutes in MS = 1200000
+            // 30 minutes in MS = 1800000
+            log(`--- Sleeping 20mins ---`);
+            await sleep(1200000);
 
             // ********************************
             // UN-STAKE - EVERY ALGO IN WALLET
             // ********************************
+            await yieldlyPage.goto('https://app.yieldly.finance/algo-prize-game');
+            log(`--- Loading ---`);
+            await yieldlyPage.waitForTimeout(30000);
+            log(`--- Unstaking ---`);
+
             await yieldlyPage.evaluate(() => {
                 [...document.querySelectorAll('button')].find(element => element.textContent === 'Withdraw').click();
             });
@@ -369,8 +218,9 @@ const log = message => {
             const [unstakedAlgo] = await yieldlyPage.$$eval('input[type=number]', inputs => inputs.map((input) => parseFloat(input.value)))
             if (unstakedAlgo == 0) {
                 await yieldlyPage.type('input.MuiInputBase-input', ESC);
-                log(`Nothing unstaked: ${unstakedALGO} ALGO`);
+                log(`Nothing unstaked: ${unstakedAlgo} ALGO`);
                 log(`------ END -----`);
+                await browser.close();
                 break;
             } else {
                 await yieldlyPage.waitForTimeout(2000);
@@ -394,7 +244,7 @@ const log = message => {
 
             break;
         } catch (e) {
-            // await browser.close();
+            await browser.close();
             log(`ERROR: ${e}\n`)
         }
     }

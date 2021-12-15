@@ -124,9 +124,9 @@ const claimPoolRewards = async (id=233725850) => {
         return claimAmounts;
     }
 
-    // Check if YLDY rewards under 475 (about 6 days worth with 81k YLDY), do not claim.
-    if (id === 233725850 && claimAmounts[0] < 474) {
-        log(`Claim Yieldly Amount too low: ${claimAmounts[0]} YLDY less than 475`);
+    // Check if YLDY rewards under 164 (about 4 days worth with 87k YLDY), do not claim.
+    if (id === 233725850 && claimAmounts[0] < 164) {
+        log(`Claim Yieldly Amount too low: ${claimAmounts[0]} YLDY less than 164`);
         await browser.close();
         return claimAmounts;
     }
@@ -174,26 +174,22 @@ const stakeYLDY = async (id=233725850, amount=100) => {
 
     await yieldlyPage.waitForTimeout(5000);
 
-    await yieldlyPage.evaluate(() => {
-        [...document.querySelectorAll('button')].find(element => element.textContent === 'Stake').click();
-    });
+    const [stakeBtn] = await yieldlyPage.$x("//button[text() = 'Stake']");
+    await stakeBtn.click();
 
     await yieldlyPage.waitForTimeout(2000);
 
     if (amount === 50) {
-        await yieldlyPage.evaluate(() => {
-            [...document.querySelectorAll('button')].find(element => element.textContent === '50%').click();
-        });
+        const [fiftyBtn] = await yieldlyPage.$x("//button[text() = '50%']");
+        await fiftyBtn.click();
     }
     else if (amount === 75) {
-        await yieldlyPage.evaluate(() => {
-            [...document.querySelectorAll('button')].find(element => element.textContent === '75%').click();
-        });
+        const [seventyFiveBtn] = await yieldlyPage.$x("//button[text() = '75%']");
+        await seventyFiveBtn.click();
     }
     else {
-        await yieldlyPage.evaluate(() => {
-            [...document.querySelectorAll('button')].find(element => element.textContent === '100%').click();
-        });
+        const [hundredBtn] = await yieldlyPage.$x("//button[text() = '100%']");
+        await hundredBtn.click();
     }
 
     await yieldlyPage.waitForTimeout(2000);
@@ -218,9 +214,8 @@ const stakeYLDY = async (id=233725850, amount=100) => {
         return stakedYLDY;
     }
 
-    await yieldlyPage.evaluate(() => {
-        [...document.querySelectorAll('button')].find(element => element.textContent === 'Next').click();
-    });
+    const [nextBtn] = await yieldlyPage.$x("//button[text() = 'Next']");
+    await nextBtn.click();
 
     await myAlgoOpened();
 
@@ -246,15 +241,13 @@ const unStakeYLDY = async (id=233725850) => {
 
     await yieldlyPage.waitForTimeout(5000);
 
-    await yieldlyPage.evaluate(() => {
-        [...document.querySelectorAll('button')].find(element => element.textContent === 'Withdraw').click();
-    });
+    const [withdrawBtn] = await yieldlyPage.$x("//button[text() = 'Withdraw']");
+    await withdrawBtn.click();
 
     await yieldlyPage.waitForTimeout(2000);
 
-    await yieldlyPage.evaluate(() => {
-        [...document.querySelectorAll('button')].find(element => element.textContent === '100%').click();
-    });
+    const [hundredBtn] = await yieldlyPage.$x("//button[text() = '100%']");
+    await hundredBtn.click();
 
     await yieldlyPage.waitForTimeout(2000);
 
@@ -264,9 +257,8 @@ const unStakeYLDY = async (id=233725850) => {
         return stakedYLDY;
     }
 
-    await yieldlyPage.evaluate(() => {
-        [...document.querySelectorAll('button')].find(element => element.textContent === 'Next').click();
-    });
+    const [nextBtn] = await yieldlyPage.$x("//button[text() = 'Next']");
+    await nextBtn.click();
 
     await myAlgoOpened();
 

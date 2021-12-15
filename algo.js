@@ -110,11 +110,13 @@ const claimNLLRewards = async () => {
 
     await yieldlyPage.goto('https://app.yieldly.finance/algo-prize-game');
 
+    await yieldlyPage.waitForTimeout(15000);
+
     await connectAlgoWallet(browser);
 
     await yieldlyPage.waitForTimeout(5000);
 
-    const [claimBtn] = await yieldlyPage.$x("//button[text() = 'Claim']");
+    const [claimBtn] = await yieldlyPage.$x("//button[contains(., 'Claim')]");
     await claimBtn.click();
 
     await yieldlyPage.waitForTimeout(2000);
@@ -127,7 +129,7 @@ const claimNLLRewards = async () => {
 
     await yieldlyPage.waitForTimeout(2000);
 
-    const [nextBtn] = await yieldlyPage.$x("//button[text() = 'Next']");
+    const [nextBtn] = await yieldlyPage.$x("//button[contains(., 'Next')]");
     await nextBtn.click();
 
     await myAlgoOpened();
@@ -154,13 +156,13 @@ const stakeALGO = async () => {
 
     await yieldlyPage.waitForTimeout(5000);
 
-    const [stakeBtn] = await yieldlyPage.$x("//button[text() = 'Stake']");
+    const [stakeBtn] = await yieldlyPage.$x("//button[contains(., 'Stake')]");
     await stakeBtn.click();
 
     await yieldlyPage.waitForTimeout(2000);
 
     // ONLY STAKE 50% OF THE TOTAL BALANCE
-    const [fiftyBtn] = await yieldlyPage.$x("//button[text() = '50%']");
+    const [fiftyBtn] = await yieldlyPage.$x("//button[contains(., '50%')]");
     await fiftyBtn.click();
 
     await yieldlyPage.waitForTimeout(2000);
@@ -171,7 +173,7 @@ const stakeALGO = async () => {
         return stakedALGO;
     }
 
-    const [nextBtn] = await yieldlyPage.$x("//button[text() = 'Next']");
+    const [nextBtn] = await yieldlyPage.$x("//button[contains(., 'Next')]");
     await nextBtn.click();
 
     await myAlgoOpened();
@@ -198,12 +200,12 @@ const unStakeALGO = async () => {
 
     await yieldlyPage.waitForTimeout(5000);
 
-    const [withdrawBtn] = await yieldlyPage.$x("//button[text() = 'Withdraw']");
+    const [withdrawBtn] = await yieldlyPage.$x("//button[contains(., 'Withdraw')]");
     await withdrawBtn.click();
 
     await yieldlyPage.waitForTimeout(2000);
 
-    const [hundredBtn] = await yieldlyPage.$x("//button[text() = '100%']");
+    const [hundredBtn] = await yieldlyPage.$x("//button[contains(., '100%')]");
     await hundredBtn.click();
 
     await yieldlyPage.waitForTimeout(2000);
@@ -214,7 +216,7 @@ const unStakeALGO = async () => {
         return stakedALGO;
     }
 
-    const [nextBtn] = await yieldlyPage.$x("//button[text() = 'Next']");
+    const [nextBtn] = await yieldlyPage.$x("//button[contains(., 'Next')]");
     await nextBtn.click();
 
     await myAlgoOpened();

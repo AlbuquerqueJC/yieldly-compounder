@@ -82,7 +82,7 @@ const claimPoolRewards = async (browser, id=348079765) => {
 
     await yieldlyPage.goto(`https://app.yieldly.finance/pools?id=${id}`);
     log(`--- Loading ---`);
-    await yieldlyPage.waitForTimeout(5000);
+    await yieldlyPage.waitForTimeout(15000);
 
     const [claimBtn] = await yieldlyPage.$x("//button[text() = 'Claim']");
     await claimBtn.click();
@@ -117,7 +117,7 @@ const stakeYLDY = async (browser, id=348079765, amount=100) => {
 
     await yieldlyPage.goto(`https://app.yieldly.finance/pools?id=${id}`);
     log(`--- Loading ---`);
-    await yieldlyPage.waitForTimeout(5000);
+    await yieldlyPage.waitForTimeout(15000);
 
     await yieldlyPage.evaluate(() => {
         [...document.querySelectorAll('button')].find(element => element.textContent === 'Stake').click();
@@ -171,7 +171,7 @@ const unStakeYLDY = async (browser, id=348079765) => {
 
     await yieldlyPage.goto(`https://app.yieldly.finance/pools?id=${id}`);
     log(`--- Loading ---`);
-    await yieldlyPage.waitForTimeout(5000);
+    await yieldlyPage.waitForTimeout(15000);
 
     await yieldlyPage.evaluate(() => {
         [...document.querySelectorAll('button')].find(element => element.textContent === 'Withdraw').click();
@@ -239,13 +239,13 @@ const log = message => {
     for (let i = 0; i < 10; i++) { // TRY TO RUN THE SCRIPT 10 TIMES TO BYPASS POSSIBLE NETWORK ERRORS
         try {
             log(`------ START -----`);
-            log(`YIELDLY-OPUL POOL AUTO COMPOUNDER v1.1.4${DEBUG ? " => [DEBUG] No transactions will be made!" : ""}`)
+            log(`YIELDLY-OPUL POOL Claim and Stake${DEBUG ? " => [DEBUG] No transactions will be made!" : ""}`)
 
             browser = await puppeteer.launch(PUPPETEER_SETTINGS);
             let pages = await browser.pages();
             const yieldlyPage = pages[0];
 
-            await yieldlyPage.goto('https://app.yieldly.finance/algo-prize-game');
+            await yieldlyPage.goto('https://app.yieldly.finance/pools?id=348079765');
             log(`--- Loading ---`);
             await yieldlyPage.waitForTimeout(15000);
 
@@ -269,46 +269,8 @@ const log = message => {
             const claimedOpulPoolRewards = await claimPoolRewards(browser, 348079765);
             log(`Claimed Pool Assets: ${claimedOpulPoolRewards[0]} OPUL`)
 
-            // *****************************************
-            // AWAIT SLEEP UNTIL REMOVE YLDY FROM POOL
-            // *****************************************
-            // 20 minutes in MS = 1,200,000 1200000
-            // 30 minutes in MS = 1,800,000 1800000
-            log(`--- Sleeping 30mins ---`);
-            await sleep(1800000);
-
-            // ********************************
-            // UN-STAKE - EVERY YLDY IN WALLET
-            // ********************************
-            // id=348079765 YLDY-OPUL
-            log(`--- UnStaking ---`);
-            const unStakedInOpulAmount = await unStakeYLDY(browser, 348079765);
-            log(`Un-Staked Amount in Opul: ${unStakedInOpulAmount} YLDY`);
-
-            // *****************************************
-            // AWAIT SLEEP UNTIL BALANCE IS AVAILABLE
-            // *****************************************
-            // 5 minutes in MS = 300,000 300000
-            // 15 minutes in MS = 900,000 900000
-            log(`--- Sleeping 5mins ---`);
-            await sleep(300000);
-
-            // *****************************************************
-            // STAKE - EVERY YLDY FROM WALLET - 1/2 YLDY / 1/2 XET
-            // *****************************************************
-            // POOL IDs
-            // id=233725850 YLDY-YLDY/ALGO
-            log(`--- Staking ---`);
-            const stakedAmount = await stakeYLDY(browser, 233725850, 50);
-            log(`Staked amount in Yieldly/Algo: ${stakedAmount} YLDY`);
-            // id=393388133 YLDY-GEMS
-            // id=424101057 YLDY-XET
-            log(`--- Staking ---`);
-            const stakedInSecondPoolAmount = await stakeYLDY(browser, 424101057);
-            log(`Staked amount in XET: ${stakedInSecondPoolAmount} YLDY`);
-
             // Close out
-            await sleep(60000);
+            await sleep(6000);
             await browser.close();
             log(`------ END -----`);
             break;

@@ -294,7 +294,7 @@ const log = message => {
     for (let i = 0; i < 10; i++) { // TRY TO RUN THE SCRIPT 10 TIMES TO BYPASS POSSIBLE NETWORK ERRORS
         try {
             log(`------ START -----`);
-            log(`YIELDLY - 1/2 XET - 1/2 YLDY/ALGO Claim and Stake${DEBUG ? " => [DEBUG] No transactions will be made!" : ""}`)
+            log(`YIELDLY - 1/2 XET - 1/2 YLDY/ALGO Unstake${DEBUG ? " => [DEBUG] No transactions will be made!" : ""}`)
 
             browser = await puppeteer.launch(PUPPETEER_SETTINGS);
             let pages = await browser.pages();
@@ -308,47 +308,38 @@ const log = message => {
             log(`--- Connecting Wallet ---`);
             await yieldlyPage.waitForTimeout(5000);
 
-            // *******************
-            // CLAIM POOL REWARDS
-            // *******************
-            log(`--- CLAIMING ---`);
+            // ********************************
+            // UN-STAKE - EVERY YLDY IN WALLET
+            // ********************************
             // POOL IDs
             // id=373819681 SMILE-SMILE Tokens
-            const claimedSmileSmilePoolRewards = await claimPoolRewards(browser, 373819681);
-            log(`Claimed SMILE-SMILE Pool Assets: ${claimedSmileSmilePoolRewards[0]} SMILE`)
+            log(`--- UNSTAKING ---`);
+            const unStakedInSmileAmount = await unStakeYLDY(browser, 373819681);
+            log(`Un-Staked Smile amount in Smile: ${unStakedInSmileAmount} SMILE`);
 
-            // id=419301793 GEMS-GEMS
-            const claimedGemsGemsPoolRewards = await claimPoolRewards(browser, 419301793);
-            log(`Claimed GEMS-GEMS Pool Assets: ${claimedGemsGemsPoolRewards[0]} GEMS`)
-
-            // id=424101057 YLDY-XET
-            const claimedXETPoolRewards = await claimPoolRewards(browser, 424101057);
-            log(`Claimed XET Pool Assets: ${claimedXETPoolRewards[0]} XET`)
+            // id=393388133 YLDY-XET
+            const unStakedInXETAmount = await unStakeYLDY(browser, 424101057);
+            log(`Un-Staked amount in XET: ${unStakedInXETAmount} YLDY`);
 
             // id=233725850 YLDY-YLDY/ALGO
-            const claimedPoolRewards = await claimPoolRewards(browser, 233725850);
-            log(`Claimed YLDY Pool Assets: ${claimedPoolRewards[0]} YLDY | ${claimedPoolRewards[1]} ALGO`)
+            const unStakedAmount = await unStakeYLDY(browser, 233725850);
+            log(`Un-Staked amount in Yieldly/Algo: ${unStakedAmount} YLDY`);
 
-            // *******************************
-            // STAKE - EVERY YLDY FROM WALLET
-            // *******************************
+            // *****************************************
+            // AWAIT SLEEP UNTIL BALANCE IS AVAILABLE
+            // *****************************************
+            // 5 minutes in MS = 300,000 300000
+            // 15 minutes in MS = 900,000 900000
+            log(`--- Sleeping 20secs ---`);
+            await sleep(20000);
+
+            // *****************************************
+            // STAKE - EVERY YLDY FROM WALLET INTO OPUL
+            // *****************************************
+            // id=348079765 YLDY-OPUL
             log(`--- STAKING ---`);
-            // POOL IDs
-            // id=233725850 YLDY-YLDY/ALGO
-            const stakedAmount = await stakeYLDY(browser, 233725850, 50);
-            log(`Staked amount in Yieldly/Algo: ${stakedAmount} YLDY`);
-
-            // id=424101057 YLDY-XET
-            const stakedInXETAmount = await stakeYLDY(browser, 424101057);
-            log(`Staked amount in XET: ${stakedInXETAmount} YLDY`);
-
-            // id=419301793 GEMS-GEMS Tokens
-            const stakedGemsInGemsAmount = await stakeYLDY(browser, 419301793);
-            log(`Staked Gems amount in Gems: ${stakedGemsInGemsAmount} GEMS`);
-
-            // id=373819681 SMILE-SMILE Tokens
-            const stakedSmileInSmileAmount = await stakeYLDY(browser, 373819681, 75);
-            log(`Staked Smile amount in Smile: ${stakedSmileInSmileAmount} SMILE`);
+            const stakedInOpulAmount = await stakeYLDY(browser, 348079765);
+            log(`Staked amount in Opul: ${stakedInOpulAmount} YLDY`);
 
             // Close out
             await sleep(6000);

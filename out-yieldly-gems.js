@@ -5,7 +5,7 @@ const axios = require('axios');
 
 ////////////////////////////////////////////
 //                                        //
-//  OPUL - YIELDY and OPUL Pools only,    //
+//  YIELDLY - 1/2 GEMS and 1/2 YLDY/ALGO  //
 //  PLEASE CHECK settings.js              //
 //                                        //
 ////////////////////////////////////////////
@@ -40,12 +40,32 @@ function terminalPrompt(query) {
 }
 
 
+// CHECK IF MYALGO ACCOUNT IS CREATED
+const checkAlgoWallet = async () => {
+    browser = await puppeteer.launch(PUPPETEER_SETTINGS);
+    const page = (await browser.pages())[0];
+    await page.goto('https://wallet.myalgo.com/');
+    await page.waitForSelector('input.input-password, div.home-image-1');
+
+    // CHECKS IF THERE'S AN <input> IN PAGE, INDICATING A WALLET HAS BEEN STORED LOCALLY
+    const walletCreated = await page.evaluate(() => !!document.querySelector('input.input-password')) // !! converts anything to boolean
+    if (!walletCreated) {
+
+        // WAIT FOR USER INPUT ON THE TERMINAL AFTER THE LOGIN IS DONE
+        await terminalPrompt("No wallet data, please create a wallet and press ENTER");
+        await browser.close();
+        process.exit();
+    }
+    await browser.close();
+}
+
+
 // CONNECTS MY ALGO WALLET
 const connectAlgoWallet = async browser => {
     let pages = await browser.pages();
     const yieldlyPage = pages[0];
 
-    await yieldlyPage.waitForTimeout(5000);
+    await yieldlyPage.waitForTimeout(15000);
 
     // Quick check if wallet is already connected
     const walletAlreadyConnected = await yieldlyPage.evaluate(() => !!document.querySelector('header button.MuiButton-contained')) // !! converts anything to boolean
@@ -54,8 +74,7 @@ const connectAlgoWallet = async browser => {
     const [connectBtn] = await yieldlyPage.$x("//button[contains(., 'Connect Wallet')]");
     await connectBtn.click();
 
-    await yieldlyPage.waitForTimeout(5000);
-
+    await yieldlyPage.waitForTimeout(1000);
     const [walletBtn] = await yieldlyPage.$x("//button[contains(., 'My ALGO Wallet')]");
     await walletBtn.click();
 
@@ -76,13 +95,13 @@ const connectAlgoWallet = async browser => {
 
 
 // CLAIM STAKING POOL REWARDS
-const claimPoolRewards = async (browser, id=348079765) => {
+const claimPoolRewards = async (browser, id=233725850) => {
     let pages = await browser.pages();
     const yieldlyPage = pages[0];
 
     await yieldlyPage.goto(`https://app.yieldly.finance/pools?id=${id}`);
     log(`--- Loading ---`);
-    await yieldlyPage.waitForTimeout(20000);
+    await yieldlyPage.waitForTimeout(15000);
 
     const [claimBtn] = await yieldlyPage.$x("//button[text() = 'Claim']");
     await claimBtn.click();
@@ -90,12 +109,36 @@ const claimPoolRewards = async (browser, id=348079765) => {
     await yieldlyPage.waitForTimeout(10000);
     const claimAmounts = await yieldlyPage.$$eval('.MuiFormControl-root input[type=text]', inputs => inputs.map((input) => parseFloat(input.value.replace(',', ''))))
 
-    if (claimAmounts[0] == 0 && claimAmounts[1] == 0) {
+    if (claimAmounts[0] == 0) {
         log(`--- Nothing to claim ---`);
         return claimAmounts;
     }
 
-    await yieldlyPage.waitForTimeout(2000);
+    // Check if YLDY rewards under 164 (about 4 days worth with 87k YLDY), do not claim.
+    if (id === 233725850 && claimAmounts[0] < 164) {
+        log(`Claim Yieldly Amount too low: ${claimAmounts[0]} YLDY less than 164`);
+        return claimAmounts;
+    }
+
+    // Check if XET rewards under 4, do not claim.
+    if (id === 424101057 && claimAmounts[0] < 4) {
+        log(`Claim XET Amount too low: ${claimAmounts[0]} XET less than 4`);
+        return claimAmounts;
+    }
+
+    // Check if SMILE-SMILE rewards under 50, do not claim.
+    if (id === 373819681 && claimAmounts[0] < 49) {
+        log(`Claim Smiles Amount too low: ${claimAmounts[0]} SMILE less than 50`);
+        return claimAmounts;
+    }
+
+    // Check if GEMS-GEMS rewards under 1, do not claim.
+    if (id === 419301793 && claimAmounts[0] < 1) {
+        log(`Claim GEMS Amount too low: ${claimAmounts[0]} GEMS less than 1`);
+        return claimAmounts;
+    }
+
+    await yieldlyPage.waitForTimeout(5000);
 
     const [nextBtn] = await yieldlyPage.$x("//button[text() = 'Next']");
     await nextBtn.click();
@@ -111,13 +154,13 @@ const claimPoolRewards = async (browser, id=348079765) => {
 
 
 // STAKE AVAILABLE BALANCE
-const stakeYLDY = async (browser, id=348079765, amount=100) => {
+const stakeYLDY = async (browser, id=233725850, amount=100) => {
     let pages = await browser.pages();
     const yieldlyPage = pages[0];
 
     await yieldlyPage.goto(`https://app.yieldly.finance/pools?id=${id}`);
     log(`--- Loading ---`);
-    await yieldlyPage.waitForTimeout(20000);
+    await yieldlyPage.waitForTimeout(15000);
 
     await yieldlyPage.evaluate(() => {
         [...document.querySelectorAll('button')].find(element => element.textContent === 'Stake').click();
@@ -144,9 +187,20 @@ const stakeYLDY = async (browser, id=348079765, amount=100) => {
     await yieldlyPage.waitForTimeout(5000);
 
     const [stakedYLDY] = await yieldlyPage.$$eval('input[type=number]', inputs => inputs.map((input) => parseFloat(input.value)))
-    // Don't stake if balance is 0 - 9 YLDY
-    if (stakedYLDY == 0 || stakedYLDY < 10) {
-        log(`--- Stake amount too low ---`);
+    if (stakedYLDY == 0) {
+        log(`--- Nothing to stake ---`);
+        return stakedYLDY;
+    }
+
+    // Check if YLDY balance under 1, do not stake.
+    if (id === 233725850 && stakedYLDY < 10) {
+        log(`Stake Yieldly amount too low: ${stakedYLDY} YLDY less than 10`);
+        return stakedYLDY;
+    }
+
+    // Check if GEMS-GEMS balance under 1, do not stake.
+    if (id === 419301793 && stakedYLDY < 1) {
+        log(`Stake Gems amount too low: ${stakedYLDY} GEMS less than 1`);
         return stakedYLDY;
     }
 
@@ -165,7 +219,7 @@ const stakeYLDY = async (browser, id=348079765, amount=100) => {
 
 
 // UN-STAKE AVAILABLE BALANCE
-const unStakeYLDY = async (browser, id=348079765) => {
+const unStakeYLDY = async (browser, id=233725850) => {
     let pages = await browser.pages();
     const yieldlyPage = pages[0];
 
@@ -234,18 +288,19 @@ const log = message => {
     axios.get(`https://api.telegram.org/bot${settings.telegram_api}/sendmessage?chat_id=${settings.telegram_chatid}&disable_web_page_preview=1&disable_notification=true&text=${encodeURIComponent(message)}`);
 }
 
+
 // RUNS THIS SCRIPT
 (async () => {
     for (let i = 0; i < 10; i++) { // TRY TO RUN THE SCRIPT 10 TIMES TO BYPASS POSSIBLE NETWORK ERRORS
         try {
             log(`------ START -----`);
-            log(`YIELDLY-OPUL POOL Claim and Stake${DEBUG ? " => [DEBUG] No transactions will be made!" : ""}`)
+            log(`YIELDLY - 1/2 XET - 1/2 YLDY/ALGO Unstake${DEBUG ? " => [DEBUG] No transactions will be made!" : ""}`)
 
             browser = await puppeteer.launch(PUPPETEER_SETTINGS);
             let pages = await browser.pages();
             const yieldlyPage = pages[0];
 
-            await yieldlyPage.goto('https://app.yieldly.finance/pools?id=348079765');
+            await yieldlyPage.goto('https://app.yieldly.finance/pools');
             log(`--- Initializing ---`);
             await yieldlyPage.waitForTimeout(20000);
 
@@ -253,21 +308,38 @@ const log = message => {
             log(`--- Connecting Wallet ---`);
             await yieldlyPage.waitForTimeout(5000);
 
-            // *******************************
-            // STAKE - EVERY YLDY FROM WALLET
-            // *******************************
-            // id=348079765 YLDY-OPUL
-            log(`--- Staking ---`);
-            const stakedInOpulAmount = await stakeYLDY(browser, 348079765);
-            log(`Staked Amount in YLDY-OPUL: ${stakedInOpulAmount} YLDY`);
+            // ********************************
+            // UN-STAKE - EVERY YLDY IN WALLET
+            // ********************************
+            // POOL IDs
+            // id=373819681 SMILE-SMILE Tokens
+            log(`--- UNSTAKING ---`);
+            const unStakedInSmileAmount = await unStakeYLDY(browser, 373819681);
+            log(`Un-Staked Smile amount in Smile: ${unStakedInSmileAmount} SMILE`);
 
-            // *******************
-            // CLAIM POOL REWARDS
-            // *******************
+            // id=393388133 YLDY-GEMS
+            const unStakedInGEMSAmount = await unStakeYLDY(browser, 393388133);
+            log(`Un-Staked amount in YLDY-GEMS: ${unStakedInGEMSAmount} YLDY`);
+
+            // id=233725850 YLDY-YLDY/ALGO
+            const unStakedAmount = await unStakeYLDY(browser, 233725850);
+            log(`Un-Staked amount in YLDY-ALGO: ${unStakedAmount} YLDY`);
+
+            // *****************************************
+            // AWAIT SLEEP UNTIL BALANCE IS AVAILABLE
+            // *****************************************
+            // 5 minutes in MS = 300,000 300000
+            // 15 minutes in MS = 900,000 900000
+            log(`--- Sleeping 20secs ---`);
+            await sleep(20000);
+
+            // *****************************************
+            // STAKE - EVERY YLDY FROM WALLET INTO OPUL
+            // *****************************************
             // id=348079765 YLDY-OPUL
-            log(`--- Claiming ---`);
-            const claimedOpulPoolRewards = await claimPoolRewards(browser, 348079765);
-            log(`Claimed YLDY-OPUL Assets: ${claimedOpulPoolRewards[0]} OPUL`)
+            log(`--- STAKING ---`);
+            const stakedInOpulAmount = await stakeYLDY(browser, 348079765);
+            log(`Staked amount in YLDY-OPUL: ${stakedInOpulAmount} YLDY`);
 
             // Close out
             await sleep(6000);

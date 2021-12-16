@@ -138,7 +138,7 @@ const claimPoolRewards = async (browser, id=233725850) => {
         return claimAmounts;
     }
 
-    await yieldlyPage.waitForTimeout(2000);
+    await yieldlyPage.waitForTimeout(5000);
 
     const [nextBtn] = await yieldlyPage.$x("//button[text() = 'Next']");
     await nextBtn.click();
@@ -166,7 +166,7 @@ const stakeYLDY = async (browser, id=233725850, amount=100) => {
         [...document.querySelectorAll('button')].find(element => element.textContent === 'Stake').click();
     });
 
-    await yieldlyPage.waitForTimeout(2000);
+    await yieldlyPage.waitForTimeout(5000);
 
     if (amount === 50) {
         await yieldlyPage.evaluate(() => {
@@ -184,7 +184,7 @@ const stakeYLDY = async (browser, id=233725850, amount=100) => {
         });
     }
 
-    await yieldlyPage.waitForTimeout(2000);
+    await yieldlyPage.waitForTimeout(5000);
 
     const [stakedYLDY] = await yieldlyPage.$$eval('input[type=number]', inputs => inputs.map((input) => parseFloat(input.value)))
     if (stakedYLDY == 0) {
@@ -231,13 +231,13 @@ const unStakeYLDY = async (browser, id=233725850) => {
         [...document.querySelectorAll('button')].find(element => element.textContent === 'Withdraw').click();
     });
 
-    await yieldlyPage.waitForTimeout(2000);
+    await yieldlyPage.waitForTimeout(5000);
 
     await yieldlyPage.evaluate(() => {
         [...document.querySelectorAll('button')].find(element => element.textContent === '100%').click();
     });
 
-    await yieldlyPage.waitForTimeout(2000);
+    await yieldlyPage.waitForTimeout(5000);
 
     const [stakedYLDY] = await yieldlyPage.$$eval('input[type=number]', inputs => inputs.map((input) => parseFloat(input.value)))
     if (stakedYLDY == 0) {
@@ -273,7 +273,7 @@ const myAlgoOpened = async () => {
         let pages = await browser.pages();
         let myAlgoPage = pages.find(page => page.url().indexOf("wallet.myalgo.com") > -1)
         if (myAlgoPage != undefined) return;
-        await sleep(500)
+        await sleep(1000)
     }
     throw "MyAlgoWallet not opened. Check your connection"
 }
@@ -323,11 +323,11 @@ const log = message => {
 
             // id=424101057 YLDY-XET
             const claimedXETPoolRewards = await claimPoolRewards(browser, 424101057);
-            log(`Claimed XET Pool Assets: ${claimedXETPoolRewards[0]} XET`)
+            log(`Claimed YLDY-XET Pool Assets: ${claimedXETPoolRewards[0]} XET`)
 
             // id=233725850 YLDY-YLDY/ALGO
             const claimedPoolRewards = await claimPoolRewards(browser, 233725850);
-            log(`Claimed YLDY Pool Assets: ${claimedPoolRewards[0]} YLDY | ${claimedPoolRewards[1]} ALGO`)
+            log(`Claimed YLDY-ALGO Pool Assets: ${claimedPoolRewards[0]} YLDY | ${claimedPoolRewards[1]} ALGO`)
 
             // *******************************
             // STAKE - EVERY YLDY FROM WALLET
@@ -336,19 +336,19 @@ const log = message => {
             // POOL IDs
             // id=233725850 YLDY-YLDY/ALGO
             const stakedAmount = await stakeYLDY(browser, 233725850, 50);
-            log(`Staked amount in Yieldly/Algo: ${stakedAmount} YLDY`);
+            log(`Staked amount in YLDY-ALGO: ${stakedAmount} YLDY`);
 
             // id=424101057 YLDY-XET
             const stakedInXETAmount = await stakeYLDY(browser, 424101057);
-            log(`Staked amount in XET: ${stakedInXETAmount} YLDY`);
+            log(`Staked amount in YLDY-XET: ${stakedInXETAmount} YLDY`);
 
             // id=419301793 GEMS-GEMS Tokens
             const stakedGemsInGemsAmount = await stakeYLDY(browser, 419301793);
-            log(`Staked Gems amount in Gems: ${stakedGemsInGemsAmount} GEMS`);
+            log(`Staked GEMS-GEMS amount: ${stakedGemsInGemsAmount} GEMS`);
 
             // id=373819681 SMILE-SMILE Tokens
             const stakedSmileInSmileAmount = await stakeYLDY(browser, 373819681, 75);
-            log(`Staked Smile amount in Smile: ${stakedSmileInSmileAmount} SMILE`);
+            log(`Staked SMILE-SMILE amount: ${stakedSmileInSmileAmount} SMILE`);
 
             // Close out
             await sleep(6000);

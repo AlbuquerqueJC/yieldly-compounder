@@ -138,7 +138,7 @@ const claimPoolRewards = async (browser, id=233725850) => {
         return claimAmounts;
     }
 
-    await yieldlyPage.waitForTimeout(2000);
+    await yieldlyPage.waitForTimeout(5000);
 
     const [nextBtn] = await yieldlyPage.$x("//button[text() = 'Next']");
     await nextBtn.click();
@@ -166,7 +166,7 @@ const stakeYLDY = async (browser, id=233725850, amount=100) => {
         [...document.querySelectorAll('button')].find(element => element.textContent === 'Stake').click();
     });
 
-    await yieldlyPage.waitForTimeout(2000);
+    await yieldlyPage.waitForTimeout(5000);
 
     if (amount === 50) {
         await yieldlyPage.evaluate(() => {
@@ -184,7 +184,7 @@ const stakeYLDY = async (browser, id=233725850, amount=100) => {
         });
     }
 
-    await yieldlyPage.waitForTimeout(2000);
+    await yieldlyPage.waitForTimeout(5000);
 
     const [stakedYLDY] = await yieldlyPage.$$eval('input[type=number]', inputs => inputs.map((input) => parseFloat(input.value)))
     if (stakedYLDY == 0) {
@@ -231,13 +231,13 @@ const unStakeYLDY = async (browser, id=233725850) => {
         [...document.querySelectorAll('button')].find(element => element.textContent === 'Withdraw').click();
     });
 
-    await yieldlyPage.waitForTimeout(2000);
+    await yieldlyPage.waitForTimeout(5000);
 
     await yieldlyPage.evaluate(() => {
         [...document.querySelectorAll('button')].find(element => element.textContent === '100%').click();
     });
 
-    await yieldlyPage.waitForTimeout(2000);
+    await yieldlyPage.waitForTimeout(5000);
 
     const [stakedYLDY] = await yieldlyPage.$$eval('input[type=number]', inputs => inputs.map((input) => parseFloat(input.value)))
     if (stakedYLDY == 0) {
@@ -273,7 +273,7 @@ const myAlgoOpened = async () => {
         let pages = await browser.pages();
         let myAlgoPage = pages.find(page => page.url().indexOf("wallet.myalgo.com") > -1)
         if (myAlgoPage != undefined) return;
-        await sleep(500)
+        await sleep(1000)
     }
     throw "MyAlgoWallet not opened. Check your connection"
 }
@@ -315,15 +315,15 @@ const log = message => {
             // id=373819681 SMILE-SMILE Tokens
             log(`--- UNSTAKING ---`);
             const unStakedInSmileAmount = await unStakeYLDY(browser, 373819681);
-            log(`Un-Staked Smile amount in Smile: ${unStakedInSmileAmount} SMILE`);
+            log(`Un-Staked SMILE-SMILE amount: ${unStakedInSmileAmount} SMILE`);
 
             // id=393388133 YLDY-XET
             const unStakedInXETAmount = await unStakeYLDY(browser, 424101057);
-            log(`Un-Staked amount in XET: ${unStakedInXETAmount} YLDY`);
+            log(`Un-Staked amount in YLDY-XET: ${unStakedInXETAmount} YLDY`);
 
             // id=233725850 YLDY-YLDY/ALGO
             const unStakedAmount = await unStakeYLDY(browser, 233725850);
-            log(`Un-Staked amount in Yieldly/Algo: ${unStakedAmount} YLDY`);
+            log(`Un-Staked amount in YLDY-ALGO: ${unStakedAmount} YLDY`);
 
             // *****************************************
             // AWAIT SLEEP UNTIL BALANCE IS AVAILABLE
@@ -339,7 +339,7 @@ const log = message => {
             // id=348079765 YLDY-OPUL
             log(`--- STAKING ---`);
             const stakedInOpulAmount = await stakeYLDY(browser, 348079765);
-            log(`Staked amount in Opul: ${stakedInOpulAmount} YLDY`);
+            log(`Staked amount in YLDY-OPUL: ${stakedInOpulAmount} YLDY`);
 
             // Close out
             await sleep(6000);

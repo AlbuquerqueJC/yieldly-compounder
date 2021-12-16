@@ -87,7 +87,7 @@ const myAlgoOpened = async () => {
         let pages = await browser.pages();
         let myAlgoPage = pages.find(page => page.url().indexOf("wallet.myalgo.com") > -1)
         if (myAlgoPage != undefined) return;
-        await sleep(500)
+        await sleep(1000)
     }
     throw "MyAlgoWallet not opened. Check your connection"
 }
@@ -129,12 +129,12 @@ const log = message => {
             await yieldlyPage.evaluate(() => {
                 [...document.querySelectorAll('button')].find(element => element.textContent === 'Withdraw').click();
             });
-            await yieldlyPage.waitForTimeout(2000);
+            await yieldlyPage.waitForTimeout(5000);
 
             await yieldlyPage.evaluate(() => {
                 [...document.querySelectorAll('button')].find(element => element.textContent === '100%').click();
             });
-            await yieldlyPage.waitForTimeout(2000);
+            await yieldlyPage.waitForTimeout(5000);
 
             const [unstakedAlgo] = await yieldlyPage.$$eval('input[type=number]', inputs => inputs.map((input) => parseFloat(input.value)))
             if (unstakedAlgo == 0) {
@@ -144,7 +144,7 @@ const log = message => {
                 await browser.close();
                 break;
             } else {
-                await yieldlyPage.waitForTimeout(2000);
+                await yieldlyPage.waitForTimeout(5000);
                 await yieldlyPage.evaluate(() => {
                     [...document.querySelectorAll('button')].find(element => element.textContent === 'Next').click();
                 });

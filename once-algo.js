@@ -87,7 +87,7 @@ const myAlgoOpened = async () => {
         let pages = await browser.pages();
         let myAlgoPage = pages.find(page => page.url().indexOf("wallet.myalgo.com") > -1)
         if (myAlgoPage != undefined) return;
-        await sleep(500)
+        await sleep(1000)
     }
     throw "MyAlgoWallet not opened. Check your connection"
 }
@@ -128,7 +128,7 @@ const log = message => {
             const [claimBtn] = await yieldlyPage.$x("//button[text() = 'Claim']");
             await claimBtn.click();
 
-            await yieldlyPage.waitForTimeout(2000);
+            await yieldlyPage.waitForTimeout(5000);
 
             const [claimAmountYLDY] = await yieldlyPage.$$eval('input', inputs => inputs.map((input) => parseFloat(input.value)))
 
@@ -136,7 +136,7 @@ const log = message => {
                 await yieldlyPage.type('input.MuiInputBase-input', ESC);
                 log(`Claimed nothing! NLL Assets: ${claimAmountYLDY} YLDY`);
             } else {
-                await yieldlyPage.waitForTimeout(2000);
+                await yieldlyPage.waitForTimeout(5000);
                 const [nextBtn] = await yieldlyPage.$x("//button[text() = 'Next']");
                 await nextBtn.click();
 
@@ -159,13 +159,13 @@ const log = message => {
             await yieldlyPage.evaluate(() => {
                 [...document.querySelectorAll('button')].find(element => element.textContent === 'Stake').click();
             });
-            await yieldlyPage.waitForTimeout(2000);
+            await yieldlyPage.waitForTimeout(5000);
 
             // ONLY STAKE 50% OF THE TOTAL BALANCE
             await yieldlyPage.evaluate(() => {
                 [...document.querySelectorAll('button')].find(element => element.textContent === '50%').click();
             });
-            await yieldlyPage.waitForTimeout(2000);
+            await yieldlyPage.waitForTimeout(5000);
 
             const [stakedALGO] = await yieldlyPage.$$eval('input[type=number]', inputs => inputs.map((input) => parseFloat(input.value)))
             if (stakedALGO == 0) {
@@ -175,7 +175,7 @@ const log = message => {
                 await browser.close();
                 break;
             } else {
-                await yieldlyPage.waitForTimeout(2000);
+                await yieldlyPage.waitForTimeout(5000);
                 await yieldlyPage.evaluate(() => {
                     [...document.querySelectorAll('button')].find(element => element.textContent === 'Next').click();
                 });

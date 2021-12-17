@@ -210,6 +210,12 @@ const stakeYLDY = async (browser, id=233725850, amount=100) => {
         return stakedYLDY;
     }
 
+    // Check if XET-XET rewards under 1, do not stake.
+    if (id === 470390215 && stakedYLDY < 1) {
+        log(`Stake XET Amount too low: ${stakedYLDY} XET less than 1`);
+        return claimAmounts;
+    }
+
     await yieldlyPage.evaluate(() => {
         [...document.querySelectorAll('button')].find(element => element.textContent === 'Next').click();
     });

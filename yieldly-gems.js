@@ -115,14 +115,20 @@ const claimPoolRewards = async (browser, id=233725850) => {
     }
 
     // Check if YLDY rewards under 164 (about 4 days worth with 87k YLDY), do not claim.
-    if (id === 233725850 && claimAmounts[0] < 164) {
+    if (id === 233725850 && claimAmounts[0] < 44) {
         log(`Claim Yieldly Amount too low: ${claimAmounts[0]} YLDY less than 164`);
         return claimAmounts;
     }
 
-    // Check if XET rewards under 4, do not claim.
+    // Check if YLDY-XET rewards under 4, do not claim.
     if (id === 424101057 && claimAmounts[0] < 4) {
         log(`Claim XET Amount too low: ${claimAmounts[0]} XET less than 4`);
+        return claimAmounts;
+    }
+
+    // Check if XET-XET rewards under 1, do not claim.
+    if (id === 470390215 && claimAmounts[0] < 1) {
+        log(`Claim XET Amount too low: ${claimAmounts[0]} XET less than 1`);
         return claimAmounts;
     }
 
@@ -202,6 +208,12 @@ const stakeYLDY = async (browser, id=233725850, amount=100) => {
     if (id === 419301793 && stakedYLDY < 1) {
         log(`Stake Gems amount too low: ${stakedYLDY} GEMS less than 1`);
         return stakedYLDY;
+    }
+
+    // Check if XET-XET rewards under 1, do not stake.
+    if (id === 470390215 && stakedYLDY < 1) {
+        log(`Stake XET Amount too low: ${stakedYLDY} XET less than 1`);
+        return claimAmounts;
     }
 
     await yieldlyPage.evaluate(() => {
@@ -321,6 +333,10 @@ const log = message => {
             const claimedGemsGemsPoolRewards = await claimPoolRewards(browser, 419301793);
             log(`Claimed GEMS-GEMS Pool Assets: ${claimedGemsGemsPoolRewards[0]} GEMS`)
 
+            // id=470390215 XET-XET Tokens
+            const claimedXETXETPoolRewards = await claimPoolRewards(browser, 470390215);
+            log(`Claimed XET-XET Pool Assets: ${claimedXETXETPoolRewards[0]} XET`)
+
             // id=393388133 YLDY-GEMS
             const claimedGEMSPoolRewards = await claimPoolRewards(browser, 393388133);
             log(`Claimed YLDY-GEMS Pool Assets: ${claimedGEMSPoolRewards[0]} GEMS`)
@@ -342,13 +358,17 @@ const log = message => {
             const stakedInGEMSAmount = await stakeYLDY(browser, 393388133);
             log(`Staked amount in YLDY-GEMS: ${stakedInGEMSAmount} YLDY`);
 
+            // id=373819681 SMILE-SMILE Tokens
+            const stakedSmileInSmileAmount = await stakeYLDY(browser, 373819681, 75);
+            log(`Staked Smile amount in Smile: ${stakedSmileInSmileAmount} SMILE`);
+
             // id=419301793 GEMS-GEMS Tokens
             const stakedGemsInGemsAmount = await stakeYLDY(browser, 419301793);
             log(`Staked GEMS-GEMS amount: ${stakedGemsInGemsAmount} GEMS`);
 
-            // id=373819681 SMILE-SMILE Tokens
-            const stakedSmileInSmileAmount = await stakeYLDY(browser, 373819681, 75);
-            log(`Staked Smile amount in Smile: ${stakedSmileInSmileAmount} SMILE`);
+            // id=470390215 XET-XET Tokens
+            const stakedInXETInXETAmount = await stakeYLDY(browser, 470390215);
+            log(`Staked amount in XET-XET: ${stakedInXETInXETAmount} XET`);
 
             // Close out
             await sleep(70000);

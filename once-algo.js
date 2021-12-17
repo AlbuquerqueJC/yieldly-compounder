@@ -152,7 +152,7 @@ const log = message => {
             // STAKE - HALF ALGO FROM WALLET
             // *****************************
             await yieldlyPage.goto('https://app.yieldly.finance/algo-prize-game');
-            log(`--- Loading ---`);
+            if (DEBUG) { log(`--- Loading ---`); }
             await yieldlyPage.waitForTimeout(30000);
             log(`--- Staking ---`);
 

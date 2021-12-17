@@ -100,7 +100,7 @@ const claimPoolRewards = async (browser, id=233725850) => {
     const yieldlyPage = pages[0];
 
     await yieldlyPage.goto(`https://app.yieldly.finance/pools?id=${id}`);
-    log(`--- Loading ---`);
+    if (DEBUG) { log(`--- Loading pool id:${id} ---`); }
     await yieldlyPage.waitForTimeout(15000);
 
     const [claimBtn] = await yieldlyPage.$x("//button[text() = 'Claim']");
@@ -159,7 +159,7 @@ const stakeYLDY = async (browser, id=233725850, amount=100) => {
     const yieldlyPage = pages[0];
 
     await yieldlyPage.goto(`https://app.yieldly.finance/pools?id=${id}`);
-    log(`--- Loading ---`);
+    if (DEBUG) { log(`--- Loading pool id:${id} ---`); }
     await yieldlyPage.waitForTimeout(15000);
 
     await yieldlyPage.evaluate(() => {
@@ -224,7 +224,7 @@ const unStakeYLDY = async (browser, id=233725850) => {
     const yieldlyPage = pages[0];
 
     await yieldlyPage.goto(`https://app.yieldly.finance/pools?id=${id}`);
-    log(`--- Loading ---`);
+    if (DEBUG) { log(`--- Loading pool id:${id} ---`); }
     await yieldlyPage.waitForTimeout(20000);
 
     await yieldlyPage.evaluate(() => {

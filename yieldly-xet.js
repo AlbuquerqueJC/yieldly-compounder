@@ -114,15 +114,21 @@ const claimPoolRewards = async (browser, id=233725850) => {
         return claimAmounts;
     }
 
-    // Check if YLDY rewards under 164 (about 4 days worth with 87k YLDY), do not claim.
-    if (id === 233725850 && claimAmounts[0] < 164) {
+    // Check if YLDY-YDLY/ALGO rewards under 164 (about 4 days worth with 87k YLDY), do not claim.
+    if (id === 233725850 && claimAmounts[0] < 44) {
         log(`Claim Yieldly Amount too low: ${claimAmounts[0]} YLDY less than 164`);
         return claimAmounts;
     }
 
-    // Check if XET rewards under 4, do not claim.
-    if (id === 424101057 && claimAmounts[0] < 4) {
-        log(`Claim XET Amount too low: ${claimAmounts[0]} XET less than 4`);
+    // Check if YLDY-XET rewards under 4, do not claim.
+    if (id === 424101057 && claimAmounts[0] < 3) {
+        log(`Claim XET Amount too low: ${claimAmounts[0]} XET less than 3`);
+        return claimAmounts;
+    }
+
+    // Check if XET-XET rewards under 1, do not claim.
+    if (id === 470390215 && claimAmounts[0] < 1) {
+        log(`Claim XET Amount too low: ${claimAmounts[0]} XET less than 1`);
         return claimAmounts;
     }
 
@@ -134,7 +140,7 @@ const claimPoolRewards = async (browser, id=233725850) => {
 
     // Check if GEMS-GEMS rewards under 1, do not claim.
     if (id === 419301793 && claimAmounts[0] < 1) {
-        log(`Claim Gems Amount too low: ${claimAmounts[0]} GEMS less than 1`);
+        log(`Claim GEMS Amount too low: ${claimAmounts[0]} GEMS less than 1`);
         return claimAmounts;
     }
 

@@ -343,7 +343,7 @@ const log = message => {
 
             // id=233725850 YLDY-YLDY/ALGO
             const claimedPoolRewards = await claimPoolRewards(browser, 233725850);
-            log(`Claimed YLDY-ALGO Pool Assets: ${claimedPoolRewards[0]} YLDY | ${claimedPoolRewards[1]} ALGO`)
+            log(`Claimed YLDY-ALGO Pool Assets: ${claimedPoolRewards[0]} | ${claimedPoolRewards[1]} ALGO-YLDY`)
 
             // *******************************
             // STAKE - EVERY YLDY FROM WALLET

@@ -235,7 +235,7 @@ const log = message => {
 
 // RUNS THIS SCRIPT
 (async () => {
-    for (let i = 0; i < 10; i++) { // TRY TO RUN THE SCRIPT 10 TIMES TO BYPASS POSSIBLE NETWORK ERRORS
+    for (let i = 0; i < 3; i++) { // TRY TO RUN THE SCRIPT 3 TIMES TO BYPASS POSSIBLE NETWORK ERRORS
         try {
             log(`------ START -----`);
             log(`YIELDLY-OPUL POOL Claim and Stake${DEBUG ? " => [DEBUG] No transactions will be made!" : ""}`)

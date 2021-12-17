@@ -118,7 +118,7 @@ const claimNLLRewards = async browser => {
 
     await signAlgoTransactions();
 
-    await yieldlyPage.waitForTimeout(30000);
+    await yieldlyPage.waitForTimeout(60000);
 
     // await browser.close();
     return claimAmountYLDY
@@ -156,7 +156,7 @@ const stakeALGO = async browser => {
 
     await signAlgoTransactions();
 
-    await yieldlyPage.waitForTimeout(30000);
+    await yieldlyPage.waitForTimeout(60000);
 
     // await browser.close();
     return stakedALGO
@@ -197,7 +197,7 @@ const unStakeALGO = async (browser) => {
 
     await signAlgoTransactions();
 
-    await yieldlyPage.waitForTimeout(30000);
+    await yieldlyPage.waitForTimeout(60000);
 
     return stakedALGO
 }
@@ -217,7 +217,7 @@ const myAlgoOpened = async () => {
         let pages = await browser.pages();
         let myAlgoPage = pages.find(page => page.url().indexOf("wallet.myalgo.com") > -1)
         if (myAlgoPage != undefined) return;
-        await sleep(500)
+        await sleep(1000)
     }
     throw "MyAlgoWallet not opened. Check your connection"
 }
@@ -234,7 +234,7 @@ const log = message => {
 
 // RUNS THIS SCRIPT
 (async () => {
-    for (let i = 0; i < 1; i++) { // TRY TO RUN THE SCRIPT 10 TIMES TO BYPASS POSSIBLE NETWORK ERRORS
+    for (let i = 0; i < 3; i++) { // TRY TO RUN THE SCRIPT 3 TIMES TO BYPASS POSSIBLE NETWORK ERRORS
         try {
             log(`------ START -----`);
             log(`YIELDLY-ALGO NLL AUTO COMPOUNDER v1.1.4${DEBUG ? " => [DEBUG] No transactions will be made!" : ""}`)
@@ -244,7 +244,7 @@ const log = message => {
             const yieldlyPage = pages[0];
 
             await yieldlyPage.goto('https://app.yieldly.finance/algo-prize-game');
-            log(`--- Loading ---`);
+            log(`--- Initializing ---`);
             await yieldlyPage.waitForTimeout(15000);
 
             await connectAlgoWallet(browser);
@@ -263,7 +263,7 @@ const log = message => {
             // *****************************
             await yieldlyPage.goto('https://app.yieldly.finance/algo-prize-game');
             log(`--- Loading ---`);
-            await yieldlyPage.waitForTimeout(15000);
+            await yieldlyPage.waitForTimeout(20000);
 
             log(`--- Staking ---`);
             const stakedAmount = await stakeALGO(browser);
@@ -290,7 +290,7 @@ const log = message => {
             log(`Un-Staked Amount in NLL: ${unStakedAmount} ALGO`);
 
             // Close out
-            await sleep(6000);
+            await sleep(70000);
             await browser.close();
             log(`------ END -----`);
 

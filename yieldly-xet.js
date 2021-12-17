@@ -291,7 +291,7 @@ const log = message => {
 
 // RUNS THIS SCRIPT
 (async () => {
-    for (let i = 0; i < 10; i++) { // TRY TO RUN THE SCRIPT 10 TIMES TO BYPASS POSSIBLE NETWORK ERRORS
+    for (let i = 0; i < 3; i++) { // TRY TO RUN THE SCRIPT 3 TIMES TO BYPASS POSSIBLE NETWORK ERRORS
         try {
             log(`------ START -----`);
             log(`YIELDLY - 1/2 XET - 1/2 YLDY/ALGO Claim and Stake${DEBUG ? " => [DEBUG] No transactions will be made!" : ""}`)
@@ -356,7 +356,7 @@ const log = message => {
 
             // id=470390215 XET-XET Tokens
             const stakedInXETInXETAmount = await stakeYLDY(browser, 470390215);
-            log(`Staked amount in YLDY-XET: ${stakedInXETInXETAmount} XET`);
+            log(`Staked amount in XET-XET: ${stakedInXETInXETAmount} XET`);
 
             // Close out
             await sleep(70000);

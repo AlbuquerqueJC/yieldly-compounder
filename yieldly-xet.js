@@ -127,8 +127,8 @@ const claimPoolRewards = async (browser, id=233725850) => {
     }
 
     // Check if XET-XET rewards under 1, do not claim.
-    if (id === 470390215 && claimAmounts[0] < 1) {
-        log(`Claim XET Amount too low: ${claimAmounts[0]} XET less than 1`);
+    if (id === 470390215 && claimAmounts[0] < 0.5) {
+        log(`Claim XET Amount too low: ${claimAmounts[0]} XET less than 0.5`);
         return claimAmounts;
     }
 

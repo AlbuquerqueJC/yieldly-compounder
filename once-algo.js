@@ -144,7 +144,7 @@ const log = message => {
 
                 await signAlgoTransactions();
 
-                await yieldlyPage.waitForTimeout(30000);
+                await yieldlyPage.waitForTimeout(60000);
                 log(`Claimed NLL Assets: ${claimAmountYLDY} YLDY`);
             }
 
@@ -183,13 +183,13 @@ const log = message => {
 
                 await signAlgoTransactions();
 
-                await yieldlyPage.waitForTimeout(30000);
+                await yieldlyPage.waitForTimeout(60000);
 
                 log(`Staked Amount in NLL: ${stakedALGO} ALGO`);
             }
 
             // Close out
-            await sleep(60000);
+            await sleep(70000);
             await browser.close();
             log(`------ END -----`);
 

@@ -104,7 +104,7 @@ const claimPoolRewards = async (browser, id=348079765) => {
 
     await signAlgoTransactions();
 
-    await yieldlyPage.waitForTimeout(30000);
+    await yieldlyPage.waitForTimeout(60000);
 
     return [Math.min(...claimAmounts), Math.max(...claimAmounts)]
 }
@@ -144,8 +144,7 @@ const stakeYLDY = async (browser, id=348079765, amount=100) => {
     await yieldlyPage.waitForTimeout(5000);
 
     const [stakedYLDY] = await yieldlyPage.$$eval('input[type=number]', inputs => inputs.map((input) => parseFloat(input.value)))
-    // Don't stake if balance is 0 - 9 YLDY
-    if (stakedYLDY == 0 || stakedYLDY < 10) {
+    if (stakedYLDY == 0) {
         log(`--- Stake amount too low ---`);
         return stakedYLDY;
     }
@@ -158,7 +157,7 @@ const stakeYLDY = async (browser, id=348079765, amount=100) => {
 
     await signAlgoTransactions();
 
-    await yieldlyPage.waitForTimeout(30000);
+    await yieldlyPage.waitForTimeout(60000);
 
     return stakedYLDY
 }
@@ -199,7 +198,7 @@ const unStakeYLDY = async (browser, id=348079765) => {
 
     await signAlgoTransactions();
 
-    await yieldlyPage.waitForTimeout(30000);
+    await yieldlyPage.waitForTimeout(60000);
 
     return stakedYLDY
 }
@@ -270,7 +269,7 @@ const log = message => {
             log(`Claimed YLDY-OPUL Assets: ${claimedOpulPoolRewards[0]} OPUL`)
 
             // Close out
-            await sleep(6000);
+            await sleep(70000);
             await browser.close();
             log(`------ END -----`);
             break;

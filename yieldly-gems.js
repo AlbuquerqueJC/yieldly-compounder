@@ -147,7 +147,7 @@ const claimPoolRewards = async (browser, id=233725850) => {
 
     await signAlgoTransactions();
 
-    await yieldlyPage.waitForTimeout(30000);
+    await yieldlyPage.waitForTimeout(60000);
 
     return [Math.min(...claimAmounts), Math.max(...claimAmounts)]
 }
@@ -212,7 +212,7 @@ const stakeYLDY = async (browser, id=233725850, amount=100) => {
 
     await signAlgoTransactions();
 
-    await yieldlyPage.waitForTimeout(30000);
+    await yieldlyPage.waitForTimeout(60000);
 
     return stakedYLDY
 }
@@ -253,7 +253,7 @@ const unStakeYLDY = async (browser, id=233725850) => {
 
     await signAlgoTransactions();
 
-    await yieldlyPage.waitForTimeout(30000);
+    await yieldlyPage.waitForTimeout(60000);
 
     return stakedYLDY
 }
@@ -351,7 +351,7 @@ const log = message => {
             log(`Staked Smile amount in Smile: ${stakedSmileInSmileAmount} SMILE`);
 
             // Close out
-            await sleep(6000);
+            await sleep(70000);
             await browser.close();
             log(`------ END -----`);
             break;

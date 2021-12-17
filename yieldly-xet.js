@@ -147,7 +147,7 @@ const claimPoolRewards = async (browser, id=233725850) => {
 
     await signAlgoTransactions();
 
-    await yieldlyPage.waitForTimeout(30000);
+    await yieldlyPage.waitForTimeout(60000);
 
     return [Math.min(...claimAmounts), Math.max(...claimAmounts)]
 }
@@ -212,7 +212,7 @@ const stakeYLDY = async (browser, id=233725850, amount=100) => {
 
     await signAlgoTransactions();
 
-    await yieldlyPage.waitForTimeout(30000);
+    await yieldlyPage.waitForTimeout(60000);
 
     return stakedYLDY
 }
@@ -253,7 +253,7 @@ const unStakeYLDY = async (browser, id=233725850) => {
 
     await signAlgoTransactions();
 
-    await yieldlyPage.waitForTimeout(30000);
+    await yieldlyPage.waitForTimeout(60000);
 
     return stakedYLDY
 }
@@ -329,6 +329,10 @@ const log = message => {
             const claimedPoolRewards = await claimPoolRewards(browser, 233725850);
             log(`Claimed YLDY-ALGO Pool Assets: ${claimedPoolRewards[0]} YLDY | ${claimedPoolRewards[1]} ALGO`)
 
+            // id=470390215 XET-XET Tokens
+            const claimedXETXETPoolRewards = await claimPoolRewards(browser, 470390215);
+            log(`Claimed XET-XET Pool Assets: ${claimedXETXETPoolRewards[0]} XET`)
+
             // *******************************
             // STAKE - EVERY YLDY FROM WALLET
             // *******************************
@@ -350,8 +354,12 @@ const log = message => {
             const stakedSmileInSmileAmount = await stakeYLDY(browser, 373819681, 75);
             log(`Staked SMILE-SMILE amount: ${stakedSmileInSmileAmount} SMILE`);
 
+            // id=470390215 XET-XET Tokens
+            const stakedInXETInXETAmount = await stakeYLDY(browser, 470390215);
+            log(`Staked amount in YLDY-XET: ${stakedInXETInXETAmount} XET`);
+
             // Close out
-            await sleep(6000);
+            await sleep(70000);
             await browser.close();
             log(`------ END -----`);
             break;

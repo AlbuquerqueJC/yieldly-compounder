@@ -153,13 +153,13 @@ const log = message => {
 
                 await signAlgoTransactions();
 
-                await yieldlyPage.waitForTimeout(30000);
+                await yieldlyPage.waitForTimeout(60000);
 
                 log(`Un-Staked Amount in NLL: ${unstakedAlgo} ALGO`);
             }
 
             // Close out
-            await sleep(60000);
+            await sleep(70000);
             await browser.close();
             log(`------ END -----`);
 

@@ -306,7 +306,7 @@ const log = message => {
     for (let i = 0; i < 3; i++) { // TRY TO RUN THE SCRIPT 3 TIMES TO BYPASS POSSIBLE NETWORK ERRORS
         try {
             log(`------ START -----`);
-            log(`YIELDLY - 1/2 XET - 1/2 YLDY/ALGO Claim and Stake${DEBUG ? " => [DEBUG] No transactions will be made!" : ""}`)
+            log(`YIELDLY - 1/2 GEMS - 1/2 YLDY/ALGO Claim and Stake${DEBUG ? " => [DEBUG] No transactions will be made!" : ""}`)
 
             browser = await puppeteer.launch(PUPPETEER_SETTINGS);
             let pages = await browser.pages();

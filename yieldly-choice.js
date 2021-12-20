@@ -337,6 +337,11 @@ const log = message => {
             const claimedXETXETPoolRewards = await claimPoolRewards(browser, 470390215);
             log(`Claimed XET-XET Pool Assets: ${claimedXETXETPoolRewards[0]} XET`)
 
+            // TODO: Remove after 12/19/2021
+            // id=393388133 YLDY-GEMS
+            const claimedGEMSPoolRewards = await claimPoolRewards(browser, 393388133);
+            log(`Claimed YLDY-GEMS Pool Assets: ${claimedGEMSPoolRewards[0]} GEMS`)
+
             // id=447336112 YLDY-CHOICE
             const claimedCHOICEPoolRewards = await claimPoolRewards(browser, 447336112);
             log(`Claimed YLDY-CHOICE Pool Assets: ${claimedCHOICEPoolRewards[0]} CHOICE`)

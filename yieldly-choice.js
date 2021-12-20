@@ -132,9 +132,9 @@ const claimPoolRewards = async (browser, id=233725850) => {
         return claimAmounts;
     }
 
-    // Check if SMILE-SMILE rewards under 50, do not claim.
-    if (id === 373819681 && claimAmounts[0] < 49) {
-        log(`Claim Smiles Amount too low: ${claimAmounts[0]} SMILE less than 50`);
+    // Check if SMILE-SMILE rewards under 100, do not claim.
+    if (id === 373819681 && claimAmounts[0] < 100) {
+        log(`Claim Smiles Amount too low: ${claimAmounts[0]} SMILE less than 100`);
         return claimAmounts;
     }
 

@@ -144,6 +144,12 @@ const claimPoolRewards = async (browser, id=233725850) => {
         return claimAmounts;
     }
 
+    // id=464365150 CHOICE-CHOICE Check if rewards under 1, do not claim.
+    if (id === 464365150 && claimAmounts[0] < 1) {
+        log(`Claim CHOICE Amount too low: ${claimAmounts[0]} CHOICE less than 1`);
+        return claimAmounts;
+    }
+
     await yieldlyPage.waitForTimeout(5000);
 
     const [nextBtn] = await yieldlyPage.$x("//button[text() = 'Next']");
@@ -213,6 +219,12 @@ const stakeYLDY = async (browser, id=233725850, amount=100) => {
     // Check if XET-XET rewards under 1, do not stake.
     if (id === 470390215 && stakedYLDY < 1) {
         log(`Stake XET Amount too low: ${stakedYLDY} XET less than 1`);
+        return stakedYLDY;
+    }
+
+    // id=464365150 CHOICE-CHOICE Check if rewards under 1, do not stake.
+    if (id === 464365150 && stakedYLDY < 1) {
+        log(`Stake CHOICE Amount too low: ${stakedYLDY} CHOICE less than 1`);
         return stakedYLDY;
     }
 
@@ -337,6 +349,10 @@ const log = message => {
             const claimedXETXETPoolRewards = await claimPoolRewards(browser, 470390215);
             log(`Claimed XET-XET Pool Assets: ${claimedXETXETPoolRewards[0]} XET`)
 
+            // id=464365150 CHOICE-CHOICE
+            const claimedCHOICECHOICEPoolRewards = await claimPoolRewards(browser, 464365150);
+            log(`Claimed CHOICE-CHOICE Pool Assets: ${claimedCHOICECHOICEPoolRewards[0]} CHOICE`)
+
             // id=393388133 YLDY-GEMS
             const claimedGEMSPoolRewards = await claimPoolRewards(browser, 393388133);
             log(`Claimed YLDY-GEMS Pool Assets: ${claimedGEMSPoolRewards[0]} GEMS`)
@@ -369,6 +385,10 @@ const log = message => {
             // id=470390215 XET-XET Tokens
             const stakedInXETInXETAmount = await stakeYLDY(browser, 470390215);
             log(`Staked amount in XET-XET: ${stakedInXETInXETAmount} XET`);
+
+            // id=464365150 CHOICE-CHOICE
+            const stakedInCHOICECHOICEAmount = await stakeYLDY(browser, 464365150);
+            log(`Staked amount in CHOICE-CHOICE: ${stakedInCHOICECHOICEAmount} CHOICE`);
 
             // Close out
             await sleep(70000);

@@ -145,7 +145,7 @@ const claimPoolRewards = async (browser, id=233725850) => {
     }
 
     // id=464365150 CHOICE-CHOICE Check if rewards under 1, do not claim.
-    if (id === 419301793 && claimAmounts[0] < 1) {
+    if (id === 464365150 && claimAmounts[0] < 1) {
         log(`Claim CHOICE Amount too low: ${claimAmounts[0]} CHOICE less than 1`);
         return claimAmounts;
     }

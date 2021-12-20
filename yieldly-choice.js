@@ -126,9 +126,9 @@ const claimPoolRewards = async (browser, id=233725850) => {
         return claimAmounts;
     }
 
-    // Check if XET-XET rewards under 1, do not claim.
-    if (id === 470390215 && claimAmounts[0] < 0.5) {
-        log(`Claim XET Amount too low: ${claimAmounts[0]} XET less than 0.5`);
+    // Check if XET-XET rewards under 4, do not claim.
+    if (id === 470390215 && claimAmounts[0] < 4) {
+        log(`Claim XET Amount too low: ${claimAmounts[0]} XET less than 4`);
         return claimAmounts;
     }
 
@@ -141,6 +141,12 @@ const claimPoolRewards = async (browser, id=233725850) => {
     // Check if GEMS-GEMS rewards under 1, do not claim.
     if (id === 419301793 && claimAmounts[0] < 1) {
         log(`Claim Gems Amount too low: ${claimAmounts[0]} GEMS less than 1`);
+        return claimAmounts;
+    }
+
+    // id=464365150 CHOICE-CHOICE Check if rewards under 1, do not claim.
+    if (id === 419301793 && claimAmounts[0] < 1) {
+        log(`Claim CHOICE Amount too low: ${claimAmounts[0]} CHOICE less than 1`);
         return claimAmounts;
     }
 
@@ -198,7 +204,7 @@ const stakeYLDY = async (browser, id=233725850, amount=100) => {
         return stakedYLDY;
     }
 
-    // Check if YLDY balance under 1, do not stake.
+    // Check if YLDY balance under 10, do not stake.
     if (id === 233725850 && stakedYLDY < 10) {
         log(`Stake Yieldly amount too low: ${stakedYLDY} YLDY less than 10`);
         return stakedYLDY;
@@ -211,8 +217,14 @@ const stakeYLDY = async (browser, id=233725850, amount=100) => {
     }
 
     // Check if XET-XET rewards under 1, do not stake.
-    if (id === 470390215 && stakedYLDY < 1) {
-        log(`Stake XET Amount too low: ${stakedYLDY} XET less than 1`);
+    if (id === 470390215 && stakedYLDY < 3) {
+        log(`Stake XET Amount too low: ${stakedYLDY} XET less than 3`);
+        return stakedYLDY;
+    }
+
+    // id=464365150 CHOICE-CHOICE Check if rewards under 1, do not stake.
+    if (id === 464365150 && stakedYLDY < 1) {
+        log(`Stake CHOICE Amount too low: ${stakedYLDY} CHOICE less than 1`);
         return stakedYLDY;
     }
 
@@ -337,10 +349,9 @@ const log = message => {
             const claimedXETXETPoolRewards = await claimPoolRewards(browser, 470390215);
             log(`Claimed XET-XET Pool Assets: ${claimedXETXETPoolRewards[0]} XET`)
 
-            // TODO: Remove after 12/19/2021
-            // id=393388133 YLDY-GEMS
-            const claimedGEMSPoolRewards = await claimPoolRewards(browser, 393388133);
-            log(`Claimed YLDY-GEMS Pool Assets: ${claimedGEMSPoolRewards[0]} GEMS`)
+            // id=464365150 CHOICE-CHOICE
+            const claimedCHOICECHOICEPoolRewards = await claimPoolRewards(browser, 464365150);
+            log(`Claimed CHOICE-CHOICE Pool Assets: ${claimedCHOICECHOICEPoolRewards[0]} CHOICE`)
 
             // id=447336112 YLDY-CHOICE
             const claimedCHOICEPoolRewards = await claimPoolRewards(browser, 447336112);
@@ -362,6 +373,10 @@ const log = message => {
             // id=447336112 YLDY-CHOICE
             const stakedInCHOICEAmount = await stakeYLDY(browser, 447336112);
             log(`Staked amount in YLDY-CHOICE: ${stakedInCHOICEAmount} YLDY`);
+
+            // id=464365150 CHOICE-CHOICE
+            const stakedInCHOICECHOICEAmount = await stakeYLDY(browser, 464365150);
+            log(`Staked amount in CHOICE-CHOICE: ${stakedInCHOICECHOICEAmount} CHOICE`);
 
             // id=373819681 SMILE-SMILE Tokens
             const stakedSmileInSmileAmount = await stakeYLDY(browser, 373819681, 75);

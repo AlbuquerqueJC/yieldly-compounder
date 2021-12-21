@@ -120,21 +120,21 @@ const claimPoolRewards = async (browser, id=233725850) => {
         return claimAmounts;
     }
 
-    // Check if YLDY-XET rewards under 4, do not claim.
-    if (id === 424101057 && claimAmounts[0] < 4) {
-        log(`Claim XET Amount too low: ${claimAmounts[0]} XET less than 4`);
+    // Check if YLDY-CHOICE rewards under 1, do not claim.
+    if (id === 447336112 && claimAmounts[0] < 1) {
+        log(`Claim CHOICE Amount too low: ${claimAmounts[0]} CHOICE less than 1`);
         return claimAmounts;
     }
 
-    // Check if XET-XET rewards under 4, do not claim.
-    if (id === 470390215 && claimAmounts[0] < 4) {
-        log(`Claim XET Amount too low: ${claimAmounts[0]} XET less than 4`);
+    // Check if XET-XET rewards under 1, do not claim.
+    if (id === 470390215 && claimAmounts[0] < 1) {
+        log(`Claim XET Amount too low: ${claimAmounts[0]} XET less than 1`);
         return claimAmounts;
     }
 
-    // Check if SMILE-SMILE rewards under 100, do not claim.
-    if (id === 373819681 && claimAmounts[0] < 100) {
-        log(`Claim Smiles Amount too low: ${claimAmounts[0]} SMILE less than 100`);
+    // Check if SMILE-SMILE rewards under 50, do not claim.
+    if (id === 373819681 && claimAmounts[0] < 49) {
+        log(`Claim Smiles Amount too low: ${claimAmounts[0]} SMILE less than 49`);
         return claimAmounts;
     }
 
@@ -216,9 +216,9 @@ const stakeYLDY = async (browser, id=233725850, amount=100) => {
         return stakedYLDY;
     }
 
-    // Check if XET-XET rewards under 1, do not stake.
-    if (id === 470390215 && stakedYLDY < 3) {
-        log(`Stake XET Amount too low: ${stakedYLDY} XET less than 3`);
+    // Check if XET-XET rewards under 2, do not stake.
+    if (id === 470390215 && stakedYLDY < 1) {
+        log(`Stake XET Amount too low: ${stakedYLDY} XET less than 1`);
         return stakedYLDY;
     }
 
@@ -379,7 +379,7 @@ const log = message => {
             log(`Staked amount in CHOICE-CHOICE: ${stakedInCHOICECHOICEAmount} CHOICE`);
 
             // id=373819681 SMILE-SMILE Tokens
-            const stakedSmileInSmileAmount = await stakeYLDY(browser, 373819681, 75);
+            const stakedSmileInSmileAmount = await stakeYLDY(browser, 373819681);
             log(`Staked Smile amount in Smile: ${stakedSmileInSmileAmount} SMILE`);
 
             // id=419301793 GEMS-GEMS Tokens

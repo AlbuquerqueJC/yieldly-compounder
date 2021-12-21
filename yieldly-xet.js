@@ -127,8 +127,8 @@ const claimPoolRewards = async (browser, id=233725850) => {
     }
 
     // Check if XET-XET rewards under 1, do not claim.
-    if (id === 470390215 && claimAmounts[0] < 0.5) {
-        log(`Claim XET Amount too low: ${claimAmounts[0]} XET less than 0.5`);
+    if (id === 470390215 && claimAmounts[0] < 1) {
+        log(`Claim XET Amount too low: ${claimAmounts[0]} XET less than 1`);
         return claimAmounts;
     }
 
@@ -379,7 +379,7 @@ const log = message => {
             log(`Staked GEMS-GEMS amount: ${stakedGemsInGemsAmount} GEMS`);
 
             // id=373819681 SMILE-SMILE Tokens
-            const stakedSmileInSmileAmount = await stakeYLDY(browser, 373819681, 75);
+            const stakedSmileInSmileAmount = await stakeYLDY(browser, 373819681);
             log(`Staked SMILE-SMILE amount: ${stakedSmileInSmileAmount} SMILE`);
 
             // id=470390215 XET-XET Tokens

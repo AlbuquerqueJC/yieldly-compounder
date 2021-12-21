@@ -120,9 +120,9 @@ const claimPoolRewards = async (browser, id=233725850) => {
         return claimAmounts;
     }
 
-    // Check if YLDY-XET rewards under 4, do not claim.
-    if (id === 424101057 && claimAmounts[0] < 4) {
-        log(`Claim XET Amount too low: ${claimAmounts[0]} XET less than 4`);
+    // Check if YLDY-GEMS rewards under 2, do not claim.
+    if (id === 393388133 && claimAmounts[0] < 2) {
+        log(`Claim GEMS Amount too low: ${claimAmounts[0]} GEMS less than 2`);
         return claimAmounts;
     }
 
@@ -216,7 +216,7 @@ const stakeYLDY = async (browser, id=233725850, amount=100) => {
         return stakedYLDY;
     }
 
-    // Check if XET-XET rewards under 1, do not stake.
+    // Check if XET-XET rewards under 2, do not stake.
     if (id === 470390215 && stakedYLDY < 1) {
         log(`Stake XET Amount too low: ${stakedYLDY} XET less than 1`);
         return stakedYLDY;
@@ -375,7 +375,7 @@ const log = message => {
             log(`Staked amount in YLDY-GEMS: ${stakedInGEMSAmount} YLDY`);
 
             // id=373819681 SMILE-SMILE Tokens
-            const stakedSmileInSmileAmount = await stakeYLDY(browser, 373819681, 75);
+            const stakedSmileInSmileAmount = await stakeYLDY(browser, 373819681);
             log(`Staked Smile amount in Smile: ${stakedSmileInSmileAmount} SMILE`);
 
             // id=419301793 GEMS-GEMS Tokens

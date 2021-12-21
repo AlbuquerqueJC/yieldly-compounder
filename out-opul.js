@@ -279,11 +279,14 @@ const log = message => {
 
             log(`--- Staking ---`);
             // id=393388133 YLDY-GEMS
-            const stakedInSecondPoolAmount = await stakeYLDY(browser, 393388133);
-            log(`Staked amount in YLDY-GEMS: ${stakedInSecondPoolAmount} YLDY`);
+            //const stakedInSecondPoolAmount = await stakeYLDY(browser, 393388133);
+            //log(`Staked amount in YLDY-GEMS: ${stakedInSecondPoolAmount} YLDY`);
             // id=424101057 YLDY-XET
             // const stakedInSecondPoolAmount = await stakeYLDY(browser, 424101057);
             // log(`Staked amount in YLDY-XET: ${stakedInSecondPoolAmount} YLDY`);
+            // id=447336112 YLDY-CHOICE
+            const stakedInSecondPoolAmount = await stakeYLDY(browser, 447336112);
+            log(`Staked amount in YLDY-CHOICE: ${stakedInSecondPoolAmount} YLDY`);
 
             // Close out
             await sleep(70000);

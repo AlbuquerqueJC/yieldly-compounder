@@ -80,6 +80,7 @@ const log = message => {
             log(`--- Loading ---`);
             await discordPage.goto('https://discord.com/channels/904883897224032256/906906150405017611');
             await discordPage.waitForTimeout(15000);
+            await discordPage.setViewport({ width: 1366, height: 768});
 
             await connectDiscord(browser);
             await discordPage.waitForTimeout(15000);
@@ -97,7 +98,7 @@ const log = message => {
             log(`--- Command sent ---`);
 
             // Close out
-            await sleep(30000);
+            await sleep(10000);
             await browser.close();
             log(`------ END -----`);
             break;

@@ -1,6 +1,6 @@
 const puppeteer = require("puppeteer");
 const readline = require("readline");
-const settings = require("./settings");
+const settings = require("./dettings");
 const axios = require('axios');
 
 ////////////////////////////////////////////
@@ -13,7 +13,6 @@ const axios = require('axios');
 const DACCOUNT = settings.daccount;
 const DPW = settings.dpw;
 const DCOMMAND = settings.dcommand;
-const DEBUG = settings.debug;
 
 // RPI4 Settings
 const PUPPETEER_SETTINGS = {
@@ -23,6 +22,7 @@ const PUPPETEER_SETTINGS = {
     userDataDir: "./user_data"
 };
 const ENTER = String.fromCharCode(13);
+const TAB = String.fromCharCode(9);
 const ESC = String.fromCharCode(27);
 
 let browser;
@@ -71,7 +71,7 @@ const log = message => {
     for (let i = 0; i < 3; i++) { // TRY TO RUN THE SCRIPT 3 TIMES TO BYPASS POSSIBLE NETWORK ERRORS
         try {
             log(`------ START -----`);
-            log(`DISCORD Hourly command g$d100${DEBUG ? " => [DEBUG] No transactions will be made!" : ""}`)
+            log(`DISCORD Hourly command g$d100`);
 
             browser = await puppeteer.launch(PUPPETEER_SETTINGS);
             let pages = await browser.pages();
@@ -88,9 +88,12 @@ const log = message => {
             // SEND COMMAND
             // *******************
             await discordPage.waitForSelector('[data-can-focus="true"]');
-            await discordPage.click('[data-can-focus="true"]')
-            await discordPage.type('[data-slate-object="block"]', [DCOMMAND, DEBUG ? ESC : ENTER]);
+            await discordPage.click('[data-can-focus="true"]');
+            await discordPage.type('[data-slate-object="block"]', [DCOMMAND]);
             await discordPage.type('[data-slate-object="block"]', [ENTER]);
+            await discordPage.waitForTimeout(1000);
+            await discordPage.type('[data-can-focus="true"]', [ENTER]);
+            await discordPage.type('[data-can-focus="true"]', [ENTER]);
             log(`--- Command sent ---`);
 
             // Close out

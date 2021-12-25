@@ -10,7 +10,9 @@ const axios = require('axios');
 //                                        //
 ////////////////////////////////////////////
 
-const MYALGO_PASSWORD = settings.password;
+const DACCOUNT = settings.daccount;
+const DPW = settings.dpw;
+const DCOMMAND = settings.dcommand;
 const DEBUG = settings.debug;
 // RPI4 Settings
 const PUPPETEER_SETTINGS = {

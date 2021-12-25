@@ -71,7 +71,7 @@ const connectDiscord = async browser => {
 
     log(`--- Check not logged in account ---`);
     // CHECKS IF THERE'S AN <input name=password> IN PAGE, INDICATING ACCOUNT NOT LOGGED IN
-    const accNotLoggedIn = await page.evaluate(
+    const accNotLoggedIn = await discordPage.evaluate(
         () => !!document.querySelector("input[name='password']")
     ) // !! converts anything to boolean
 

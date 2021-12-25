@@ -14,7 +14,6 @@ const DACCOUNT = settings.daccount;
 const DPW = settings.dpw;
 const DCOMMAND = settings.dcommand;
 const DEBUG = settings.debug;
-const MYALGO_PASSWORD = settings.password;
 
 // RPI4 Settings
 const PUPPETEER_SETTINGS = {
@@ -27,44 +26,6 @@ const ENTER = String.fromCharCode(13);
 const ESC = String.fromCharCode(27);
 
 let browser;
-
-// PRINTS TERMINAL STUFF WAITING FOR USER INPUT
-function terminalPrompt(query) {
-    const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout,
-    });
-
-    return new Promise((resolve) =>
-        rl.question(query, (ans) => {
-            rl.close();
-            resolve(ans);
-        })
-    );
-}
-
-
-// CHECK IF DISCORD ACCOUNT IS LOGGED IN
-const checkDiscord = async () => {
-    browser = await puppeteer.launch(PUPPETEER_SETTINGS);
-    const page = (await browser.pages())[0];
-    await page.goto('https://discord.com/channels/904883897224032256/906906150405017611');
-    await page.waitForSelector("input[name='password']");
-
-    // CHECKS IF THERE'S AN <input name=password> IN PAGE, INDICATING ACCOUNT NOT LOGGED IN
-    const accNotLoggedIn = await page.evaluate(
-        () => !!document.querySelector("input[name='password']")
-    ) // !! converts anything to boolean
-
-    if (accNotLoggedIn) {
-        // WAIT FOR USER INPUT ON THE TERMINAL AFTER THE LOGIN IS DONE
-        await terminalPrompt("Not logged in, please login and press ENTER");
-        await browser.close();
-        process.exit();
-    }
-    await browser.close();
-}
-
 
 // CONNECTS DISCORD
 const connectDiscord = async browser => {

@@ -89,8 +89,8 @@ const log = message => {
             // *******************
             await discordPage.waitForSelector('[data-can-focus="true"]');
             await discordPage.click('[data-can-focus="true"]')
-            await discordPage.type('[data-can-focus="true"]', [DCOMMAND, DEBUG ? ESC : ENTER]);
-            await discordPage.type('[data-can-focus="true"]', [ENTER]);
+            await discordPage.type('[data-slate-object="block"]', [DCOMMAND, DEBUG ? ESC : ENTER]);
+            await discordPage.type('[data-slate-object="block"]', [ENTER]);
             log(`--- Command sent ---`);
 
             // Close out

@@ -73,32 +73,26 @@ const connectDiscord = async browser => {
 
     await discordPage.waitForTimeout(10000);
 
-    log(`--- Check not logged in account ---`);
+    log(`--- Check if account is logged in ---`);
     // CHECKS IF THERE'S AN <input name=password> IN PAGE, INDICATING ACCOUNT NOT LOGGED IN
     const accNotLoggedIn = await discordPage.evaluate(
         () => !!document.querySelector("input[name='password']")
     ) // !! converts anything to boolean
 
-    await discordPage.waitForTimeout(1000);
+    if (accNotLoggedIn) {
+        log(`--- Logging in account ---`);
+        await discordPage.waitForTimeout(1000);
+        await discordPage.waitForSelector("input[name='password']");
 
-    await discordPage.waitForSelector("input[name='password']");
+        await discordPage.type("input[name='email']", [DACCOUNT]);
+        await discordPage.waitForTimeout(1000);
 
-    await discordPage.type("input[name='email']", [DACCOUNT]);
-    await discordPage.waitForTimeout(1000);
-
-    await discordPage.type("input[name='password']", [DPW, ENTER]);
-    await discordPage.waitForTimeout(1000);
-
-    log(`--- logged in account ---`);
-}
-
-// SIGNS TRANSACTIONS
-const signAlgoTransactions = async () => {
-    const pages = await browser.pages();
-    const myAlgoPage = pages.find(page => page.url().indexOf("wallet.myalgo.com") > -1)
-    await myAlgoPage.waitForSelector('.custom-btn');
-    await myAlgoPage.click('.custom-btn')
-    await myAlgoPage.type('input.input-password', [MYALGO_PASSWORD, DEBUG ? ESC : ENTER]);
+        await discordPage.type("input[name='password']", [DPW, ENTER]);
+        await discordPage.waitForTimeout(1000);
+        log(`--- Logged in ---`);
+    } else {
+        log(`--- Logged in ---`);
+    }
 }
 
 // PAUSE EXECUTION FOR THE SPECIFIED AMOUNT OF TIME
@@ -122,12 +116,12 @@ const log = message => {
             let pages = await browser.pages();
             const discordPage = pages[0];
 
+            log(`--- Loading ---`);
             await discordPage.goto('https://discord.com/channels/904883897224032256/906906150405017611');
-            await discordPage.waitForTimeout(10000);
+            await discordPage.waitForTimeout(15000);
 
-            log(`--- Logging in account ---`);
             await connectDiscord(browser);
-            await discordPage.waitForTimeout(20000);
+            await discordPage.waitForTimeout(15000);
 
             // *******************
             // SEND COMMAND

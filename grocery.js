@@ -5,7 +5,7 @@ const axios = require('axios');
 
 ////////////////////////////////////////////
 //                                        //
-//  YIELDLY - 1/2 GEMS and 1/2 YLDY/ALGO  //
+//  DISCORD GROCERY COMMANDS              //
 //  PLEASE CHECK settings.js              //
 //                                        //
 ////////////////////////////////////////////
@@ -14,6 +14,8 @@ const DACCOUNT = settings.daccount;
 const DPW = settings.dpw;
 const DCOMMAND = settings.dcommand;
 const DEBUG = settings.debug;
+const MYALGO_PASSWORD = settings.password;
+
 // RPI4 Settings
 const PUPPETEER_SETTINGS = {
     headless: settings.headless,
@@ -81,7 +83,7 @@ const connectDiscord = async browser => {
 
     await discordPage.waitForSelector("input[name='password']");
 
-    await discordPage.type("input[name='name']", [DACCOUNT]);
+    await discordPage.type("input[name='email']", [DACCOUNT]);
     await discordPage.waitForTimeout(1000);
 
     await discordPage.type("input[name='password']", [DPW, ENTER]);

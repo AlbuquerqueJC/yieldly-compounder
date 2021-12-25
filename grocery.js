@@ -123,11 +123,11 @@ const log = message => {
             const discordPage = pages[0];
 
             await discordPage.goto('https://discord.com/channels/904883897224032256/906906150405017611');
-            await discordPage.waitForTimeout(20000);
+            await discordPage.waitForTimeout(10000);
 
             log(`--- Logging in account ---`);
             await connectDiscord(browser);
-            await discordPage.waitForTimeout(5000);
+            await discordPage.waitForTimeout(25000);
 
             // *******************
             // SEND COMMAND

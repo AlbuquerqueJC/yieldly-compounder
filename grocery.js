@@ -127,7 +127,7 @@ const log = message => {
 
             log(`--- Logging in account ---`);
             await connectDiscord(browser);
-            await discordPage.waitForTimeout(25000);
+            await discordPage.waitForTimeout(20000);
 
             // *******************
             // SEND COMMAND
@@ -135,6 +135,8 @@ const log = message => {
             await discordPage.waitForSelector('[data-can-focus="true"]');
             await discordPage.click('[data-can-focus="true"]')
             await discordPage.type('[data-can-focus="true"]', [DCOMMAND, DEBUG ? ESC : ENTER]);
+            await discordPage.type('[data-can-focus="true"]', [ENTER]);
+            log(`--- Command sent ---`);
 
             // Close out
             await sleep(30000);

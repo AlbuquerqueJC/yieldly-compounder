@@ -89,8 +89,7 @@ const connectDiscord = async browser => {
     await discordPage.type("input[name='password']", [DPW, ENTER]);
     await discordPage.waitForTimeout(1000);
 
-    const [walletBtn] = await discordPage.$x("//button[contains(., 'Login')]");
-    await walletBtn.click();
+    log(`--- logged in account ---`);
 }
 
 // SIGNS TRANSACTIONS

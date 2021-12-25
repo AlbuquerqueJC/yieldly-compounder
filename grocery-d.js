@@ -92,7 +92,7 @@ const log = message => {
             // *******************
             await discordPage.waitForSelector('[data-can-focus="true"]');
             await discordPage.click('[data-can-focus="true"]');
-            await discordPage.type('[data-slate-object="block"]', [DCOMMAND]);
+            await discordPage.type('[data-slate-object="block"]', [DDCOMMAND]);
             await discordPage.type('[data-slate-object="block"]', [ENTER]);
             await discordPage.waitForTimeout(1000);
             await discordPage.type('[data-can-focus="true"]', [ENTER]);

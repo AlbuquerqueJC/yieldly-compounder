@@ -73,7 +73,7 @@ const log = message => {
     for (let i = 0; i < 3; i++) { // TRY TO RUN THE SCRIPT 3 TIMES TO BYPASS POSSIBLE NETWORK ERRORS
         try {
             log(`------ START -----`);
-            log(`DISCORD Hourly command g$d100`);
+            log(`DISCORD Daily command g$daily`);
 
             browser = await puppeteer.launch(PUPPETEER_SETTINGS);
             let pages = await browser.pages();

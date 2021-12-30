@@ -312,11 +312,7 @@ const log = message => {
             // UN-STAKE - EVERY YLDY IN WALLET
             // ********************************
             // POOL IDs
-            // id=373819681 SMILE-SMILE Tokens
             log(`--- UNSTAKING ---`);
-            const unStakedInSmileAmount = await unStakeYLDY(browser, 373819681);
-            log(`Un-Staked Smile amount in Smile: ${unStakedInSmileAmount} SMILE`);
-
             // id=447336112 YLDY-CHOICE
             const unStakedInCHOICEAmount = await unStakeYLDY(browser, 447336112);
             log(`Un-Staked amount in YLDY-CHOICE: ${unStakedInCHOICEAmount} YLDY`);
@@ -333,13 +329,13 @@ const log = message => {
             log(`--- Sleeping 70secs ---`);
             await sleep(70000);
 
-            // *****************************************
-            // STAKE - EVERY YLDY FROM WALLET INTO OPUL
-            // *****************************************
-            // id=348079765 YLDY-OPUL
+            // ******************************************
+            // STAKE - EVERY YLDY FROM WALLET INTO AKITA
+            // ******************************************
+            // id=511597182 YLDY-AKITA
             log(`--- STAKING ---`);
-            const stakedInOpulAmount = await stakeYLDY(browser, 348079765);
-            log(`Staked amount in YLDY-OPUL: ${stakedInOpulAmount} YLDY`);
+            const stakedInAKITAAmount = await stakeYLDY(browser, 511597182);
+            log(`Staked amount in YLDY-AKITA: ${stakedInAKITAAmount} YLDY`);
 
             // Close out
             await sleep(70000);

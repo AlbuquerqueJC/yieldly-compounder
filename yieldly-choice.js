@@ -318,7 +318,7 @@ const log = message => {
     for (let i = 0; i < 3; i++) { // TRY TO RUN THE SCRIPT 3 TIMES TO BYPASS POSSIBLE NETWORK ERRORS
         try {
             log(`------ START -----`);
-            log(`YIELDLY - 1/2 CHOICE - 1/2 YLDY/ALGO Claim and Stake${DEBUG ? " => [DEBUG] No transactions will be made!" : ""}`)
+            log(`YIELDLY - 1/2 CHOICE - 1/2 YLDY/ALGO Claim and Stake${DEBUG ? " => [DEBUG] No transactions will be made!" : ""}`);
 
             browser = await puppeteer.launch(PUPPETEER_SETTINGS);
             let pages = await browser.pages();
@@ -339,27 +339,39 @@ const log = message => {
             // POOL IDs
             // id=373819681 SMILE-SMILE Tokens
             const claimedSmileSmilePoolRewards = await claimPoolRewards(browser, 373819681);
-            log(`Claimed SMILE-SMILE Pool Assets: ${claimedSmileSmilePoolRewards[0]} SMILE`)
+            log(`Claimed SMILE-SMILE Pool Assets: ${claimedSmileSmilePoolRewards[0]} SMILE`);
 
             // id=419301793 GEMS-GEMS
             const claimedGemsGemsPoolRewards = await claimPoolRewards(browser, 419301793);
-            log(`Claimed GEMS-GEMS Pool Assets: ${claimedGemsGemsPoolRewards[0]} GEMS`)
+            log(`Claimed GEMS-GEMS Pool Assets: ${claimedGemsGemsPoolRewards[0]} GEMS`);
 
             // id=470390215 XET-XET Tokens
             const claimedXETXETPoolRewards = await claimPoolRewards(browser, 470390215);
-            log(`Claimed XET-XET Pool Assets: ${claimedXETXETPoolRewards[0]} XET`)
+            log(`Claimed XET-XET Pool Assets: ${claimedXETXETPoolRewards[0]} XET`);
 
             // id=464365150 CHOICE-CHOICE
             const claimedCHOICECHOICEPoolRewards = await claimPoolRewards(browser, 464365150);
-            log(`Claimed CHOICE-CHOICE Pool Assets: ${claimedCHOICECHOICEPoolRewards[0]} CHOICE`)
+            log(`Claimed CHOICE-CHOICE Pool Assets: ${claimedCHOICECHOICEPoolRewards[0]} CHOICE`);
 
             // id=447336112 YLDY-CHOICE
             const claimedCHOICEPoolRewards = await claimPoolRewards(browser, 447336112);
-            log(`Claimed YLDY-CHOICE Pool Assets: ${claimedCHOICEPoolRewards[0]} CHOICE`)
+            log(`Claimed YLDY-CHOICE Pool Assets: ${claimedCHOICEPoolRewards[0]} CHOICE`);
 
             // id=233725850 YLDY-YLDY/ALGO
             const claimedPoolRewards = await claimPoolRewards(browser, 233725850);
-            log(`Claimed YLDY-ALGO Pool Assets: ${claimedPoolRewards[0]} | ${claimedPoolRewards[1]} ALGO-YLDY`)
+            log(`Claimed YLDY-ALGO Pool Assets: ${claimedPoolRewards[0]} | ${claimedPoolRewards[1]} ALGO-YLDY`);
+
+            // id=511597182 YLDY-AKITA
+            const claimedAKITAPoolRewards = await claimPoolRewards(browser, 511597182);
+            log(`Claimed YLDY-AKITA Pool Assets: ${claimedAKITAPoolRewards[0]} AKITA`);
+
+            // ********************************
+            // UN-STAKE - EVERY YLDY IN WALLET
+            // ********************************
+            log(`--- UNSTAKING ---`);
+            // id=511597182 YLDY-AKITA
+            const unStakedInAKITAAmount = await unStakeYLDY(browser, 511597182);
+            log(`Un-Staked amount in YLDY-AKITA: ${unStakedInAKITAAmount} YLDY`);
 
             // *******************************
             // STAKE - EVERY YLDY FROM WALLET
@@ -367,7 +379,7 @@ const log = message => {
             log(`--- STAKING ---`);
             // POOL IDs
             // id=233725850 YLDY-YLDY/ALGO
-            const stakedAmount = await stakeYLDY(browser, 233725850, 50);
+            const stakedAmount = await stakeYLDY(browser, 233725850, 75);
             log(`Staked amount in Yieldly/Algo: ${stakedAmount} YLDY`);
 
             // id=447336112 YLDY-CHOICE
@@ -397,7 +409,7 @@ const log = message => {
             break;
         } catch (e) {
             await browser.close();
-            log(`ERROR: ${e}\n`)
+            log(`ERROR: ${e}\n`);
         }
     }
 

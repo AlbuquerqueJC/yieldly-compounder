@@ -36,7 +36,7 @@ const connectDiscord = async browser => {
 
     await discordPage.waitForTimeout(10000);
 
-    log(`--- Check if account is logged in ---`);
+    // log(`--- Check if account is logged in ---`);
     // CHECKS IF THERE'S AN <input name=password> IN PAGE, INDICATING ACCOUNT NOT LOGGED IN
     const accNotLoggedIn = await discordPage.evaluate(
         () => !!document.querySelector("input[name='password']")
@@ -79,7 +79,7 @@ const log = message => {
             let pages = await browser.pages();
             const discordPage = pages[0];
 
-            log(`--- Loading ---`);
+            // log(`--- Loading ---`);
             await discordPage.goto('https://discord.com/channels/904883897224032256/906906150405017611');
             await discordPage.waitForTimeout(15000);
             await discordPage.setViewport({ width: 1366, height: 768});

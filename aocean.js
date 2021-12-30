@@ -12,9 +12,7 @@ const axios = require('axios');
 
 const DACCOUNT = settings.daccount;
 const DPW = settings.dpw;
-const DCOMMAND = settings.dcommand;
-const DDCOMMAND = settings.ddcommand;
-const DBCOMMAND = settings.dbcommand;
+const DCOMMAND = '$work';
 
 // RPI4 Settings
 const PUPPETEER_SETTINGS = {
@@ -73,14 +71,14 @@ const log = message => {
     for (let i = 0; i < 3; i++) { // TRY TO RUN THE SCRIPT 3 TIMES TO BYPASS POSSIBLE NETWORK ERRORS
         try {
             log(`------ START -----`);
-            log(`DISCORD Daily command g$daily`);
+            log(`DISCORD AOCean Every 3 hours command $work`);
 
             browser = await puppeteer.launch(PUPPETEER_SETTINGS);
             let pages = await browser.pages();
             const discordPage = pages[0];
 
             // log(`--- Loading ---`);
-            await discordPage.goto('https://discord.com/channels/904883897224032256/906906150405017611');
+            await discordPage.goto('https://discord.com/channels/896603438790627328/905493823034097725');
             await discordPage.waitForTimeout(15000);
             await discordPage.setViewport({ width: 1366, height: 768});
 
@@ -92,7 +90,7 @@ const log = message => {
             // *******************
             await discordPage.waitForSelector('[data-can-focus="true"]');
             await discordPage.click('[data-can-focus="true"]');
-            await discordPage.type('[data-slate-object="block"]', [DDCOMMAND]);
+            await discordPage.type('[data-slate-object="block"]', [DCOMMAND]);
             await discordPage.type('[data-slate-object="block"]', [ENTER]);
             await discordPage.waitForTimeout(1000);
             await discordPage.type('[data-can-focus="true"]', [ENTER]);

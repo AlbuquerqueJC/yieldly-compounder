@@ -13,7 +13,7 @@ const axios = require('axios');
 const DACCOUNT = settings.daccount;
 const DPW = settings.dpw;
 const DCOMMAND = '/daily';
-const DDCOMMAND = '/dice 240';
+const DDCOMMAND = '/dice 100';
 const DDDCOMMAND = '/rps 100 paper';
 
 // RPI4 Settings
@@ -73,7 +73,7 @@ const log = message => {
     for (let i = 0; i < 3; i++) { // TRY TO RUN THE SCRIPT 3 TIMES TO BYPASS POSSIBLE NETWORK ERRORS
         try {
             log(`------ START -----`);
-            log(`DISCORD HComb Every day command /daily and /dice 240`);
+            log(`DISCORD HComb Every day commands ${DCOMMAND}, ${DDDCOMMAND} and ${DDDCOMMAND}`);
 
             browser = await puppeteer.launch(PUPPETEER_SETTINGS);
             let pages = await browser.pages();
@@ -93,6 +93,13 @@ const log = message => {
             await discordPage.waitForSelector('[data-can-focus="true"]');
             await discordPage.click('[data-can-focus="true"]');
             await discordPage.type('[data-slate-object="block"]', [DCOMMAND]);
+            await discordPage.type('[data-slate-object="block"]', [ENTER]);
+            await discordPage.waitForTimeout(1000);
+            await discordPage.type('[data-can-focus="true"]', [ENTER]);
+            await discordPage.type('[data-can-focus="true"]', [ENTER]);
+            // Next command
+            await discordPage.click('[data-can-focus="true"]');
+            await discordPage.type('[data-slate-object="block"]', [DDCOMMAND]);
             await discordPage.type('[data-slate-object="block"]', [ENTER]);
             await discordPage.waitForTimeout(1000);
             await discordPage.type('[data-can-focus="true"]', [ENTER]);

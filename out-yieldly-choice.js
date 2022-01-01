@@ -5,7 +5,7 @@ const axios = require('axios');
 
 ////////////////////////////////////////////
 //                                        //
-//  YIELDLY - 1/2 GEMS and 1/2 YLDY/ALGO  //
+//  YIELDLY - 1/2 CHOICE & 1/2 YLDY/ALGO  //
 //  PLEASE CHECK settings.js              //
 //                                        //
 ////////////////////////////////////////////
@@ -186,22 +186,24 @@ const stakeYLDY = async (browser, id=233725850, amount=100) => {
 
     await yieldlyPage.waitForTimeout(5000);
 
-    const [stakedYLDY] = await yieldlyPage.$$eval('input[type=number]', inputs => inputs.map((input) => parseFloat(input.value)))
-    if (stakedYLDY == 0) {
+    const stakedYLDY = await yieldlyPage.$$eval('.MuiInputBase-input', inputs => inputs.map((input) => parseFloat(input.value)))
+    const staked = stakedYLDY.slice(-1);
+
+    if (staked === 0) {
         log(`--- Nothing to stake ---`);
-        return stakedYLDY;
+        return staked;
     }
 
     // Check if YLDY balance under 1, do not stake.
-    if (id === 233725850 && stakedYLDY < 10) {
-        log(`Stake Yieldly amount too low: ${stakedYLDY} YLDY less than 10`);
-        return stakedYLDY;
+    if (id === 233725850 && staked < 10) {
+        log(`Stake Yieldly amount too low: ${staked} YLDY less than 10`);
+        return staked;
     }
 
     // Check if GEMS-GEMS balance under 1, do not stake.
-    if (id === 419301793 && stakedYLDY < 1) {
-        log(`Stake Gems amount too low: ${stakedYLDY} GEMS less than 1`);
-        return stakedYLDY;
+    if (id === 419301793 && staked < 1) {
+        log(`Stake Gems amount too low: ${staked} GEMS less than 1`);
+        return staked;
     }
 
     await yieldlyPage.evaluate(() => {
@@ -214,7 +216,7 @@ const stakeYLDY = async (browser, id=233725850, amount=100) => {
 
     await yieldlyPage.waitForTimeout(60000);
 
-    return stakedYLDY
+    return staked
 }
 
 
@@ -239,10 +241,12 @@ const unStakeYLDY = async (browser, id=233725850) => {
 
     await yieldlyPage.waitForTimeout(5000);
 
-    const [stakedYLDY] = await yieldlyPage.$$eval('input[type=number]', inputs => inputs.map((input) => parseFloat(input.value)))
-    if (stakedYLDY == 0) {
+    const stakedYLDY = await yieldlyPage.$$eval('.MuiInputBase-input', inputs => inputs.map((input) => parseFloat(input.value)))
+    const staked = stakedYLDY.slice(-1);
+
+    if (staked === 0) {
         log(`--- Nothing to unstake ---`);
-        return stakedYLDY;
+        return staked;
     }
 
     await yieldlyPage.evaluate(() => {
@@ -255,7 +259,7 @@ const unStakeYLDY = async (browser, id=233725850) => {
 
     await yieldlyPage.waitForTimeout(60000);
 
-    return stakedYLDY
+    return staked
 }
 
 // SIGNS TRANSACTIONS

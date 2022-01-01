@@ -107,9 +107,10 @@ const claimPoolRewards = async (browser, id=233725850) => {
     await claimBtn.click();
 
     await yieldlyPage.waitForTimeout(10000);
-    const claimAmounts = await yieldlyPage.$$eval('.MuiFormControl-root input[type=text]', inputs => inputs.map((input) => parseFloat(input.value.replace(',', ''))))
+    const claimAmounts = await yieldlyPage.$$eval('input[type=text]', inputs => inputs.map((input) => parseFloat(input.value)))
+    claimAmounts.shift();
 
-    if (claimAmounts[0] == 0) {
+    if (claimAmounts[0] === 0 || claimAmounts[0] < 1) {
         log(`--- Nothing to claim ---`);
         return claimAmounts;
     }
@@ -189,7 +190,7 @@ const stakeYLDY = async (browser, id=233725850, amount=100) => {
     const stakedYLDY = await yieldlyPage.$$eval('.MuiInputBase-input', inputs => inputs.map((input) => parseFloat(input.value)))
     const staked = stakedYLDY.slice(-1);
 
-    if (staked === 0) {
+    if (staked === 0 || staked < 1) {
         log(`--- Nothing to stake ---`);
         return staked;
     }
@@ -244,7 +245,7 @@ const unStakeYLDY = async (browser, id=233725850) => {
     const stakedYLDY = await yieldlyPage.$$eval('.MuiInputBase-input', inputs => inputs.map((input) => parseFloat(input.value)))
     const staked = stakedYLDY.slice(-1);
 
-    if (staked === 0) {
+    if (staked === 0 || staked < 1) {
         log(`--- Nothing to unstake ---`);
         return staked;
     }

@@ -86,29 +86,30 @@ const log = message => {
 
             await connectDiscord(browser);
             await discordPage.waitForTimeout(15000);
-
             // *******************
             // SEND COMMAND
             // *******************
             await discordPage.waitForSelector('[data-can-focus="true"]');
             await discordPage.click('[data-can-focus="true"]');
             await discordPage.type('[data-slate-object="block"]', [DCOMMAND]);
+            await sleep(1000);
             await discordPage.type('[data-slate-object="block"]', [ENTER]);
-            await discordPage.waitForTimeout(1000);
             await discordPage.type('[data-can-focus="true"]', [ENTER]);
             await discordPage.type('[data-can-focus="true"]', [ENTER]);
+            await sleep(15000);
             // Next command
             await discordPage.click('[data-can-focus="true"]');
             await discordPage.type('[data-slate-object="block"]', [DDCOMMAND]);
+            await sleep(1000);
             await discordPage.type('[data-slate-object="block"]', [ENTER]);
-            await discordPage.waitForTimeout(1000);
             await discordPage.type('[data-can-focus="true"]', [ENTER]);
             await discordPage.type('[data-can-focus="true"]', [ENTER]);
+            await sleep(15000);
             // Next command
             await discordPage.click('[data-can-focus="true"]');
             await discordPage.type('[data-slate-object="block"]', [DDDCOMMAND]);
+            await sleep(1000);
             await discordPage.type('[data-slate-object="block"]', [ENTER]);
-            await discordPage.waitForTimeout(1000);
             await discordPage.type('[data-can-focus="true"]', [ENTER]);
             await discordPage.type('[data-can-focus="true"]', [ENTER]);
             log(`--- Command sent ---`);

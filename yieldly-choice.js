@@ -200,7 +200,7 @@ const stakeYLDY = async (browser, id=233725850, amount=100) => {
     await yieldlyPage.waitForTimeout(5000);
 
     const stakedYLDY = await yieldlyPage.$$eval('.MuiInputBase-input', inputs => inputs.map((input) => parseFloat(input.value)))
-    const staked = stakedYLDY.slice(-1);
+    const staked = stakedYLDY.pop();
 
     if (staked === 0 || staked < 1) {
         log(`--- Nothing to stake ---`);
@@ -273,7 +273,7 @@ const unStakeYLDY = async (browser, id=233725850) => {
     await yieldlyPage.waitForTimeout(5000);
 
     const stakedYLDY = await yieldlyPage.$$eval('.MuiInputBase-input', inputs => inputs.map((input) => parseFloat(input.value)))
-    const staked = stakedYLDY.slice(-1);
+    const staked = stakedYLDY.pop();
 
     if (staked === 0 || staked < 1) {
         log(`--- Nothing to unstake ---`);

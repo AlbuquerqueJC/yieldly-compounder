@@ -105,7 +105,7 @@ const log = message => {
 
 // RUNS THIS SCRIPT
 (async () => {
-    for (let i = 0; i < 3; i++) { // TRY TO RUN THE SCRIPT 3 TIMES TO BYPASS POSSIBLE NETWORK ERRORS
+    for (let i = 0; i < 5; i++) { // TRY TO RUN THE SCRIPT 3 TIMES TO BYPASS POSSIBLE NETWORK ERRORS
         try {
             log(`------ START -----`);
             log(`YIELDLY-ALGO NLL AUTO COMPOUNDER v1.1.4${DEBUG ? " => [DEBUG] No transactions will be made!" : ""}`)
@@ -136,8 +136,8 @@ const log = message => {
             });
             await yieldlyPage.waitForTimeout(5000);
 
-            const [unstakedAlgo] = await yieldlyPage.$$eval('input[type=number]', inputs => inputs.map((input) => parseFloat(input.value)))
-            if (unstakedAlgo == 0) {
+            const [unstakedAlgo] = await yieldlyPage.$$eval('input', inputs => inputs.map((input) => parseFloat(input.value)))
+            if (unstakedAlgo === 0) {
                 await yieldlyPage.type('input.MuiInputBase-input', ESC);
                 log(`Nothing unstaked: ${unstakedAlgo} ALGO`);
                 log(`------ END -----`);

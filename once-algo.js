@@ -132,7 +132,7 @@ const log = message => {
 
             const [claimAmountYLDY] = await yieldlyPage.$$eval('input', inputs => inputs.map((input) => parseFloat(input.value)))
 
-            if (claimAmountYLDY == 0) {
+            if (claimAmountYLDY === 0) {
                 await yieldlyPage.type('input.MuiInputBase-input', ESC);
                 log(`Claimed nothing! NLL Assets: ${claimAmountYLDY} YLDY`);
             } else {
@@ -167,8 +167,8 @@ const log = message => {
             });
             await yieldlyPage.waitForTimeout(5000);
 
-            const [stakedALGO] = await yieldlyPage.$$eval('input[type=number]', inputs => inputs.map((input) => parseFloat(input.value)))
-            if (stakedALGO == 0) {
+            const [stakedALGO] = await yieldlyPage.$$eval('input', inputs => inputs.map((input) => parseFloat(input.value)))
+            if (stakedALGO === 0) {
                 await yieldlyPage.type('input.MuiInputBase-input', ESC);
                 log(`Staked nothing: ${stakedALGO} ALGO`);
                 log(`------ END -----`);
